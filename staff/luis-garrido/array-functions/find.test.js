@@ -1,4 +1,4 @@
-suite('TEST find');
+suite('find');
 
 // use case 1
 
