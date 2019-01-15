@@ -6,5 +6,5 @@ function indexOf(arr, value, startIndex) {
     }
 }
 var array = [1,2,3,4,5,3,7];
-// var indexFound = indexOf(array,3,3);
+var indexFound = indexOf(array,3,3);
 console.log(indexFound);
