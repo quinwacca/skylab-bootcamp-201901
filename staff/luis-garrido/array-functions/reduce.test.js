@@ -1,4 +1,4 @@
-suite('join');
+suite('reduce');
 
 // use case 1
 

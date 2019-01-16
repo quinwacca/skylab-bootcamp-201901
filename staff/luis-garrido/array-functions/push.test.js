@@ -1,4 +1,4 @@
-suite('join');
+suite('push');
 
 // use case 1
 

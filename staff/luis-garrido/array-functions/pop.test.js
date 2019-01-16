@@ -1,4 +1,4 @@
-suite('join');
+suite('pop');
 
 // use case 1
 

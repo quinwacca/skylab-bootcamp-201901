@@ -4,33 +4,34 @@
  * The reverse() method reverses an array in place. The first array element
  * becomes the last, and the last array element becomes the first.
  * 
- * @param {Array} arr - array to be joined
- * @param {String} separator - default value = ","
+ * @param {Array} array - array to be reversed
  * 
  * @throws {Error} - TODO
  * @throws {TypeError} - TODO
  * 
- * @return {String} value - every item in array joined with the separator
+ * @return {Array} array - a reference to the new array
  * 
  */
 
-function join(arr, separator) {
-    if (!(arr instanceof Array))
-        throw new TypeError(arr + ' is not an array');
-    separator = separator === null ? "null" : separator;
-    separator = separator === undefined ? "," : separator;
-    separator = separator.toString();
-    var stringed = '';
-    for (var i = 0; i<arr.length; i++) {
-        stringed+=arr[i]+separator;
-        if (i===arr.length-2) {
-            i++;
-            stringed+=arr[i];
-        }
+function reduce(array) {
+    if (!(array instanceof Array))
+        throw new TypeError(array + ' is not an array');
+
+    var temp;
+    count=0;
+
+    for (var i = array.length-1; i>array.length/2-1; i--) {
+        temp=array[count];
+        array[count]=array[i];
+        array[i]=temp;
+        count++;
     }
-    return stringed;
+    
+    return array;
+
 }
 
-// var array = [1,2,3,4,5,3,7];
-// var indexFound = join(array,1);
-// console.log(indexFound);
+var array = [1,2,3,4,5,3,'a'];
+console.log(array);
+reduce(array);
+console.log(array);
