@@ -1,8 +1,8 @@
 /**
- * Abstraction of slice.
+ * Abstraction of splice.
  * 
- * The slice() method returns a shallow copy of a portion of an array into a new array object
- * selected from begin to end (end not included). The original array will not be modified.
+ * The splice() method changes the contents of an array by removing or replacing
+ * existing elements and/or adding new elements.
  * 
  * @param {Array}  array - array to slice
  * @param {Number} begin - index from which you start slicing, default value = 0
