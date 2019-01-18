@@ -45,19 +45,21 @@ function splice() {
         var firstItemIndex = 3;
         removeItems = removeItems > arrayOriginal.length-begin ? arrayOriginal.length-begin : removeItems;
     }
+    [1,2,3,4,5]
     else {
         var firstItemIndex = 2;
+        var removeItems;
     }
     console.log(array);  
     
     // -- DELETE -------------------------
-
+debugger;
     if (removeItems) {
         for (var i = begin; i<end; i++) {
             arrayOriginal[i] = arrayOriginal[i+removeItems];
         }
         debugger;
-        arrayOriginal.length = arrayOriginal.length-(removeItems*2);
+        arrayOriginal.length = arrayOriginal.length-(removeItems);
         console.log(array);
     }
     
