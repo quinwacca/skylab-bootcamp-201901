@@ -298,48 +298,70 @@ Horroy.prototype.splice = function() {
         throw new TypeError(this + ' is not an horroy');
     if (isNaN(arguments[0]))
         throw new TypeError(arguments[0] + ' is not a number');
-    if (arguments[1] === undefined)
-        throw new Error('value expected, number of items to delete or items to add');
     
     arguments[0] = arguments[0] >= arguments.length ? 0 : (arguments[0] < 0 ? this.length + arguments[0] : arguments[0]);
+    arguments[1] = isNaN(arguments[1]) ? 0 : (arguments[1] > this.length-begin ? this.length-begin : arguments[1]);
         
     var horroyOriginal = this;
     var begin = arguments[0];
     var end = arguments.length;
-    
-    if (!isNaN(arguments[1])) {
-        var removeItems = arguments[1];
-        var firstItemIndex = 2;
-        removeItems = removeItems > horroyOriginal.length-begin ? horroyOriginal.length-begin : removeItems;
-    }
-    
-    else {
-        var firstItemIndex = 1;
-        var removeItems;
-    }
+    var elementsToDelete = arguments[1];
+    var firstItemIndex = 2;
+    var returnedHorroy = new Horroy();
         
     // -- DELETE -------------------------
 
-    if (removeItems) {
-        for (var i = begin; i<end; i++) {
-            horroyOriginal[i] = horroyOriginal[i+removeItems];
+    if (elementsToDelete) {
+        indexReturned = 0;
+        for (var i = begin; i<=end; i++) {
+            if (i<begin+elementsToDelete) {
+                returnedHorroy[indexReturned++] = horroyOriginal[i];
+                returnedHorroy.length++;
+            }
+            horroyOriginal[i] = horroyOriginal[i+elementsToDelete];
         }
+        for (var i= begin; i<=end; i++) {
+            delete horroyOriginal[i+end];
+        }
+        horroyOriginal.length = horroyOriginal.length-(elementsToDelete);
 
-        horroyOriginal.length = horroyOriginal.length-(removeItems);
     }
     
-
     // -- ADD ----------------------------
 
-    var count=0;
-    
-    for (var i = firstItemIndex; i<end; i++) {
-        for (var j = horroyOriginal.length; j>=i; j--) {
-            horroyOriginal[j]=horroyOriginal[j-1];
+    if (arguments.length>2) {
+        var count=0;
+        for (var i = firstItemIndex; i<end; i++) {
+            for (var j = horroyOriginal.length; j>=i; j--) {
+                horroyOriginal[j]=horroyOriginal[j-1];
+            }   
+            horroyOriginal[begin+count++]=arguments[i];
+            this.length++;
         }
-        horroyOriginal[begin+count]=arguments[i];
-        count++;
-        this.length++;
     }
-    return this;
+
+    return returnedHorroy;
 }
+
+/**
+ * ------------------------------------------- SOME -------------------------------------------
+ * 
+ * The some() method tests whether at least one element in the horroy passes
+ * the test implemented by the provided function.
+ * 
+ * @param {Function} callback - * Function to test for each element, taking three arguments:
+ *                          element - The current element being processed in the array.
+ *                          index - (optional) The index of the current element being processed in the array.
+ *                          horroy - (optional) The horroy some() was called upon.
+ * @param {Horroy} thisArg - (optional) Value to use as this when executing callback.
+ *                          
+ * @param {arguments} arguments - (optional) items to add to horroy
+ *                          if no elements to add, splice will only remove elements
+ * 
+ * @throws {Error} - TODO
+ * @throws {TypeError} - TODO
+ * 
+ * @return {Boolean} returnBoolean - true if the callback function returns a truthy value for any array element; 
+ *                          otherwise, false.
+ * 
+ */

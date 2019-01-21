@@ -295,11 +295,40 @@ describe('Horroy', function() {
         beforeEach(function() {
             horroy = new Horroy('pizza','cheese','lettuce','bacon','tomato');
         });
-        it('should add elements', function() {
-            var res = horroy.splice(1,'salad','fries');
+        it('should add elements, empty horroy returned', function() {
+            var res = horroy.splice(1, 0, 'salad','fries');
 
-            var expectedRes = new Horroy('pizza', 'salad','fries','cheese','lettuce','bacon','tomato');
+            var expectedHorroy = new Horroy('pizza', 'salad','fries','cheese','lettuce','bacon','tomato');
+            var expectedRes = new Horroy();
 
+            expect(JSON.stringify(horroy)).toBe(JSON.stringify(expectedHorroy));
+            expect(JSON.stringify(res)).toBe(JSON.stringify(expectedRes));
+        });
+        it('should delete elements', function() {
+            var res = horroy.splice(1, 2);
+
+            var expectedHorroy = new Horroy('pizza','bacon','tomato');
+            var expectedRes = new Horroy('cheese','lettuce');
+
+            expect(JSON.stringify(horroy)).toBe(JSON.stringify(expectedHorroy));
+            expect(JSON.stringify(res)).toBe(JSON.stringify(expectedRes));
+        });
+        it('should delete and add elements', function() {
+            var res = horroy.splice(1, 2, 'salad', 'fries');
+
+            var expectedHorroy = new Horroy('pizza', 'salad', 'fries', 'bacon','tomato');
+            var expectedRes = new Horroy('cheese','lettuce');
+
+            expect(JSON.stringify(horroy)).toBe(JSON.stringify(expectedHorroy));
+            expect(JSON.stringify(res)).toBe(JSON.stringify(expectedRes));
+        });
+        it('should delete and add elements, delete undefined', function() {
+            var res = horroy.splice(1, undefined, 'salad', 'fries');
+
+            var expectedHorroy = new Horroy('pizza', 'salad', 'fries', 'cheese', 'lettuce','bacon','tomato');
+            var expectedRes = new Horroy();
+
+            expect(JSON.stringify(horroy)).toBe(JSON.stringify(expectedHorroy));
             expect(JSON.stringify(res)).toBe(JSON.stringify(expectedRes));
         });
     });
