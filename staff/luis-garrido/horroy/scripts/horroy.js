@@ -350,18 +350,60 @@ Horroy.prototype.splice = function() {
  * the test implemented by the provided function.
  * 
  * @param {Function} callback - * Function to test for each element, taking three arguments:
- *                          element - The current element being processed in the array.
- *                          index - (optional) The index of the current element being processed in the array.
+ *                          element - The current element being processed in the horroy.
+ *                          index - (optional) The index of the current element being processed in the horroy.
  *                          horroy - (optional) The horroy some() was called upon.
  * @param {Horroy} thisArg - (optional) Value to use as this when executing callback.
- *                          
- * @param {arguments} arguments - (optional) items to add to horroy
- *                          if no elements to add, splice will only remove elements
  * 
  * @throws {Error} - TODO
  * @throws {TypeError} - TODO
  * 
- * @return {Boolean} returnBoolean - true if the callback function returns a truthy value for any array element; 
+ * @return {Boolean} returnBoolean - true if the callback function returns a truthy value for any horroy element; 
  *                          otherwise, false.
  * 
  */
+
+Horroy.prototype.some = function(callback) {
+    if (!(callback instanceof Function))
+        throw new TypeError(callback + ' is not a function');
+
+    for (var i = 0; i<this.length; i++) {
+        if (callback(this[i])) return true;
+    }
+    return false;
+}
+
+/**
+ * ----------------------------------------- FILTER -------------------------------------------
+ * 
+ * The filter() method creates a new horroy with all elements that pass the test implemented
+ * by the provided function.
+ * 
+ * @param {Function} callback - * Function is a predicate, to test each element of the horroy.
+ *                          Return true to keep the element, false otherwise. It accepts three arguments:
+ *                          element - The current element being processed in the horroy.
+ *                          index - (optional) The index of the current element being processed in the horroy.
+ *                          horroy - (optional) The horroy filter() was called upon.
+ * @param {Horroy} thisArg - (optional) Value to use as this when executing callback.
+ * 
+ * @throws {Error} - TODO
+ * @throws {TypeError} - TODO
+ * 
+ * @return {Horroy} A new horroy with the elements that pass the test. If no elements pass the test,
+ *                          an empty horroy will be returned.
+ * 
+ */
+
+Horroy.prototype.filter = function(callback) {
+    if (!(callback instanceof Function))
+        throw new TypeError(callback + ' is not a function');
+
+    var filteredHorroy = new Horroy();
+    count = 0;
+    for (var i = 0; i<this.length; i++) {
+        if (callback(this[i])) {
+            filteredHorroy[count++] = this[i];
+        };
+    }
+    return false;
+}

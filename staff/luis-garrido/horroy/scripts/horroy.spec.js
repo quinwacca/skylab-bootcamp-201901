@@ -332,5 +332,29 @@ describe('Horroy', function() {
             expect(JSON.stringify(res)).toBe(JSON.stringify(expectedRes));
         });
     });
+
+    // --------------------------------------- SOME ----------------------------------------------
+
+    describe('some', function() {
+        beforeEach(function() {
+            horroy = new Horroy('pizza','cheese','lettuce','bacon','tomato');
+        });
+        it('should find "cheese" and should return true', function() {
+            var res = horroy.some(function(element){
+                return element === 'cheese';
+            })
+
+            expectedRes = true;
+            expect(res).toBe(expectedRes);
+        });
+        it('should not find "salad" and should return false', function() {
+            var res = horroy.some(function(element){
+                return element === 'salad';
+            })
+
+            expectedRes = false;
+            expect(res).toBe(expectedRes);
+        });
+    });
 });
 
