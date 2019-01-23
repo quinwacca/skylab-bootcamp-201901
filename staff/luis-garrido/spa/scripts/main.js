@@ -1,80 +1,82 @@
-var loginPanel = new LoginPanel;
-var homePanel = new HomePanel;
-var registerPanel = new RegisterPanel;
+'use strict';
 
-document.body.appendChild(loginPanel.element);
-document.body.appendChild(homePanel.element);
-document.body.appendChild(registerPanel.element);
+var loginPanel = new LoginPanel;
+var registerPanel = new RegisterPanel;
+// var homePanel = new HomePanel
+// var searchPanel = new SearchPanel
+
+var $body = $(document.body);
+
+$body.append(loginPanel.$element);
+$body.append(registerPanel.$element);
+// document.body.appendChild(homePanel.element);
+
+// homePanel.element.appendChild(searchPanel.element);
 
 loginPanel.onLogin = function(email, password) {
     try {
-        login(email, password, function(user) {
-            loginPanel.hide();
+        logic.login(email, password, function(user) {
+            // loginPanel.hide();
+            // loginPanel.clear();
 
-            homePanel.user = user;
-            homePanel.show();
+            // homePanel.user = user;
+            // homePanel.show();
         });
     } catch(err) {
         loginPanel.error = err.message;
     }
 };
 
-homePanel.onLogout = function() {
-    homePanel.hide();
-    loginPanel.clear();
-    loginPanel.show();
-};
-
-loginPanel.onRegisterLink = function() {
-    loginPanel.clear();
+loginPanel.onGoToRegister = function() {
     loginPanel.hide();
+    loginPanel.clear();
+
     registerPanel.show();
 };
 
-registerPanel.onLoginLink = function() {
-    registerPanel.clear();
+// registerPanel.onRegister = function(name, surname, email, password, passwordConfirmation) {
+//     try {
+//         logic.register(name, surname, email, password, passwordConfirmation, function() {
+//             registerPanel.hide();
+//             registerPanel.clear();
+
+//             loginPanel.show();
+//         });
+//     } catch(err) {
+//         registerPanel.error = err.message;
+//     }
+// };
+
+registerPanel.onGoToLogin = function() {
     registerPanel.hide();
+    registerPanel.clear();
+
     loginPanel.show();
 };
 
-registerPanel.onRegister = function(name, surname, email, password, passwordConfirmation) {
-    try {
-        register(name, surname, email, password, passwordConfirmation, function () {
-            registerPanel.clear();
-            registerPanel.hide();
-            loginPanel.show();
-        });
-    } catch (err) {
-        registerPanel.error = err.message;
-    }
-};
+// homePanel.onLogout = function() {
+//     homePanel.hide();
 
-homePanel.onSearch = function(query) {
-    search(query, function(error, ducklings) {
-        if (error) homePanel.listNoResults = error;
-        else homePanel.listResults = ducklings;
-    });
-}
+//     searchPanel.clear();
 
-
-// var loginPanel2 = new LoginPanel
-
-// document.body.appendChild(loginPanel2.element);
-
-// loginPanel2.onLogin = function(email, password) {
-//     console.log('llama a otra logica', email, password);
+//     loginPanel.clear();
+//     loginPanel.show();
 // };
 
-
-// var mainPanel = new Panel
-
-// var registerPanel = new RegisterPanel
-// var welcomePanel = new WelcomePanel
-
-// mainPanel.add(loginPanel)
-// mainPanel.add(registerPanel)
-// mainPanel.add(welcomePanel)
-
-// loginPanel.onLogin = function() {}
-
-// ...
+// searchPanel.onSearch = function(query) {
+//     try {
+//         logic.search(query, function(error, results) {
+//             if (error) {
+//                 searchPanel.error = error
+//                 searchPanel.clearResults();
+//             } else searchPanel.results = results.map(function(result) {
+//                 return {
+//                     text: result.title,
+//                     image: result.imageUrl
+//                 }
+//             });
+//         });
+//     } catch(err) {
+//         searchPanel.error = err.message;
+//     } 
+// };
