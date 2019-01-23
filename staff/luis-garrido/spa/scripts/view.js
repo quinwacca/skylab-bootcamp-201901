@@ -120,7 +120,7 @@ Object.defineProperty(LoginPanel.prototype, 'onRegisterLink', {
 
 //#region welcome panel
 
-function WelcomePanel() {
+function HomePanel() {
 
     Panel.call(this, document.createElement('section'));
 
@@ -130,40 +130,108 @@ function WelcomePanel() {
     var title = document.createElement('h2');
     container.appendChild(title);
 
-    var welcomeText = document.createTextNode('Welcome, ');
+    var welcomeText = document.createTextNode('Duckling Search Engine 🐥🐣');
     title.appendChild(welcomeText);
+
+    var welcomeMessage = document.createElement('h3');
+    container.appendChild(welcomeMessage);
+
+    var welcomeText = document.createTextNode('Welcome, ');
+    welcomeMessage.appendChild(welcomeText);
 
     var userSpan = document.createElement('span');
     userSpan.className = 'welcome__name';
-    title.appendChild(userSpan);
+    welcomeMessage.appendChild(userSpan);
     this.__userSpan__ = userSpan;
 
     var exclamationText = document.createTextNode('!');
-    title.appendChild(exclamationText);
+    welcomeMessage.appendChild(exclamationText);
 
     var logoutButton = document.createElement('button');
     logoutButton.className = 'welcome__logout';
     logoutButton.innerText = 'Logout';
     container.appendChild(logoutButton);
     this.__logoutButton__ = logoutButton;
+
+    var form = document.createElement('form');
+    form.action = 'https://duckling-api.herokuapp.com/api/search';
+    form.method = 'get';
+    container.appendChild(form);
+    this.__form__ = form
+
+    var inputSearch = document.createElement('input');
+    inputSearch.type = 'text';
+    inputSearch.name = 'q';
+    inputSearch.placeholder = 'Search...';
+    form.appendChild(inputSearch);
+    this.__inputSearch__ = inputSearch;
+
+    var buttonSearch = document.createElement('button');
+    buttonSearch.type = 'submit';
+    buttonSearch.innerText = 'Search';
+    form.appendChild(buttonSearch);
+
+    var results = document.createElement('ul');
+    container.appendChild(results);
+    this.__results__ = results;
 }
 
-WelcomePanel.prototype = Object.create(Panel.prototype);
-WelcomePanel.prototype.constructor = WelcomePanel;
+HomePanel.prototype = Object.create(Panel.prototype);
+HomePanel.prototype.constructor = HomePanel;
 
-Object.defineProperty(WelcomePanel.prototype, 'user', { 
+Object.defineProperty(HomePanel.prototype, 'user', { 
     set: function(user) { 
         this.__userSpan__.innerText = user.name;
     } 
 });
 
-Object.defineProperty(WelcomePanel.prototype, 'onLogout', { 
+Object.defineProperty(HomePanel.prototype, 'onLogout', { 
     set: function(callback) { 
         this.__logoutButton__.addEventListener('click', function(event) {
             event.preventDefault();
             callback();
         });
     } 
+});
+
+Object.defineProperty(HomePanel.prototype, 'onSearch', {
+    set: function(callback) {
+        this.__form__.addEventListener('submit', function (event) {
+            event.preventDefault();
+            var query = this.__inputSearch__.value;
+            callback(query);
+        }.bind(this));
+    }
+});
+
+Object.defineProperty(HomePanel.prototype, 'listNoResults', {
+    set: function(message) {
+        this.__results__.innerHTML = '';
+        var item = document.createElement('li');
+        item.innerText = message;
+        this.__results__.appendChild(item);
+    }
+});
+
+Object.defineProperty(HomePanel.prototype, 'listResults', {
+    set: function(ducklings) {
+        this.__results__.innerHTML = '';
+        ducklings.forEach(function (duckling) {
+            
+            var item = document.createElement('li');
+            
+            item.innerText = duckling.title;
+            
+            var image = document.createElement('img');
+            
+            image.src = duckling.imageUrl;
+            image.style.width = '100px';
+            
+            this.__results__.appendChild(image);
+            
+            this.__results__.appendChild(item);
+        }.bind(this));
+    }
 });
 
 
@@ -195,7 +263,7 @@ function RegisterPanel() {
     form.appendChild(nameLabel);
 
     var nameInput = document.createElement('input');
-    nameInput.type = 'name';
+    nameInput.type = 'text';
     nameInput.name = 'name';
     nameInput.placeholder = 'name';
     nameInput.required = true;
@@ -208,7 +276,7 @@ function RegisterPanel() {
     form.appendChild(surnameLabel);
 
     var surnameInput = document.createElement('input');
-    surnameInput.type = 'surname';
+    surnameInput.type = 'text';
     surnameInput.name = 'surname';
     surnameInput.placeholder = 'surname';
     surnameInput.required = true;
