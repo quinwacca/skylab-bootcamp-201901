@@ -178,28 +178,21 @@ Object.defineProperty(RegisterPanel.prototype, 'onGoToLogin', {
 //#region home panel
 
 function HomePanel() {
-    Panel.call(this, document.createElement('section'));
+    Panel.call(this, $('<section class="home">'
+    + '<h2>Welcome, <span></span>!</h2>'
+    + '<button>Logout</button>'
 
-    var container = this.element;
-    container.className = 'home';
+    ));
 
-    var title = document.createElement('h2');
-    container.appendChild(title);
+    var $container = this.$element;
+    
+    var $title = $container.children('h2');
+    
+    var $userSpan = $title.children('span');
+    this.__$userSpan__ = $userSpan;
 
-    var welcomeText = document.createTextNode('Welcome, ');
-    title.appendChild(welcomeText);
-
-    var userSpan = document.createElement('span');
-    title.appendChild(userSpan);
-    this.__userSpan__ = userSpan;
-
-    var exclamationText = document.createTextNode('!');
-    title.appendChild(exclamationText);
-
-    var logoutButton = document.createElement('button');
-    logoutButton.innerText = 'Logout';
-    container.appendChild(logoutButton);
-    this.__logoutButton__ = logoutButton;
+    var $logoutButton = $container.children('button');
+    this.__$logoutButton__ = $logoutButton;
 }
 
 HomePanel.prototype = Object.create(Panel.prototype);
@@ -207,13 +200,13 @@ HomePanel.prototype.constructor = HomePanel;
 
 Object.defineProperty(HomePanel.prototype, 'user', {
     set: function (user) {
-        this.__userSpan__.innerText = user.name;
+        this.__$userSpan__.innerText = user.name;
     }
 });
 
 Object.defineProperty(HomePanel.prototype, 'onLogout', {
     set: function (callback) {
-        this.__logoutButton__.addEventListener('click', callback);
+        this.__$logoutButton__.on('click', callback);
     }
 });
 
@@ -222,33 +215,29 @@ Object.defineProperty(HomePanel.prototype, 'onLogout', {
 //#region search panel
 
 function SearchPanel() {
-    Panel.call(this, document.createElement('section'));
+    Panel.call(this, $('<section>'
+        + '<form>'
+        +   '<input type="text" name="query" placeholder="...">'
+        +   '<button type="submit">Search</button>'
+        + '</form>'
+        + '</section>'
+    ));
 
-    var container = this.element;
+    var $container = this.$element;
 
-    var form = document.createElement('form');
-    container.appendChild(form);
-    this.__form__ = form;
+    var $form = $container.children('form');
+    this.__$form__ = $form;
 
-    var queryInput = document.createElement('input');
-    queryInput.type = 'text';
-    queryInput.name = 'query';
-    queryInput.placeholder = '...';
-    form.appendChild(queryInput);
-    this.__queryInput__ = queryInput;
-
-    var searchButton = document.createElement('button');
-    searchButton.type = 'submit';
-    searchButton.innerText = 'Search';
-    form.appendChild(searchButton);
-
+    var $queryInput = $form.children('input');
+    this.__$queryInput__ = $queryInput;
+    
     var errorPanel = new ErrorPanel;
-    container.appendChild(errorPanel.element);
+    $container.append(errorPanel.$element);
     this.__errorPanel__ = errorPanel;
 
-    var resultList = document.createElement('ul');
-    container.appendChild(resultList);
-    this.__resultList__ = resultList;
+    var $resultList = $('<ul></ul>');
+    $container.append($resultList);
+    this.__$resultList__ = $resultList;
 }
 
 SearchPanel.prototype = Object.create(Panel.prototype);
@@ -256,10 +245,10 @@ SearchPanel.prototype.constructor = SearchPanel;
 
 Object.defineProperty(SearchPanel.prototype, 'onSearch', {
     set: function (callback) {
-        this.__form__.addEventListener('submit', function (event) {
+        this.__$form__.on('submit', function (event) {
             event.preventDefault();
 
-            var query = this.__queryInput__.value;
+            var query = this.__$queryInput__.val();
 
             callback(query);
         }.bind(this));
@@ -275,12 +264,12 @@ Object.defineProperty(SearchPanel.prototype, 'error', {
 
 Object.defineProperty(SearchPanel.prototype, 'results', {
     set: function (results) {
-        this.__resultList__.innerHTML = '';
+        this.__$resultList__.empty();
         this.__errorPanel__.hide();
 
         results.forEach(function (result) {
             var item = document.createElement('li');
-            this.__resultList__.appendChild(item);
+            this.__$resultList__.append(item);
 
             var text = document.createTextNode(result.text);
             item.appendChild(text);
@@ -295,13 +284,13 @@ Object.defineProperty(SearchPanel.prototype, 'results', {
 
 SearchPanel.prototype.clear = function () {
     this.clearResults();
-    this.__queryInput__.value = '';
+    this.__$queryInput__.value = '';
     this.__errorPanel__.message = '';
     this.__errorPanel__.hide();
 };
 
 SearchPanel.prototype.clearResults = function () {
-    this.__resultList__.innerHTML = '';
+    this.__$resultList__.empty();
 };
 
 //#endregion
