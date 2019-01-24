@@ -1,0 +1,67 @@
+html {
+    
+}
+
+body {
+    background: linear-gradient(270deg, rgba(255,122,50,0.4) 0%,rgba(234,209,126,0.4) 100%);
+    background-image: url(./duckl.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom right;
+}
+
+.login {
+    background: linear-gradient(135deg, #ff7a32 0%,#ead17e 100%);
+    padding: 2em;
+    /* border-radius: 0.5em;
+    border-style: solid;
+    border-color: gray; */
+    color: rgb(20, 20, 20);
+    max-width: 720px;
+    
+}
+
+.error {
+    display: none;
+    padding: 1em;
+    color: white;
+    /* background-color: red;
+    color: white;
+    border-radius: 0.5em;
+    border-style: solid;
+    border-color: white; */
+}
+
+.register {
+    display: none;
+    background: linear-gradient(135deg, #3e6899 0%,#f695f9 100%);
+    padding: 2em;
+    color: rgb(20, 20, 20);
+    /* border-radius: 0.5em;
+    border-style: solid;
+    border-color: gray; */
+    max-width: 720px;
+}
+
+.home {
+    display: none;
+    background: linear-gradient(135deg, #ff7a32 0%,#ead17e 100%);
+    padding: 2em;
+    /* border-radius: 0.5em;
+    border-style: solid;
+    border-color: gray; */
+    max-width: 720px;
+    color: rgb(20, 20, 20);
+}
+
+.display-4 {
+    text-align: center;
+}
+
+.login-button {
+    margin: 0.75em;
+}
+
+ul {
+    list-style-type: none;
+}
