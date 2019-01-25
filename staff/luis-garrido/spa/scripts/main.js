@@ -70,15 +70,16 @@ searchPanel.onSearch = function (query) {
         logic.search(query, function (error, results) {
             if (error) {
                 searchPanel.error = error
+
                 resultsPanel.clear();
             } else {
                 searchPanel.clearError();
+
                 resultsPanel.results = results.map(function (result) {
                     return {
+                        id: result.id,
                         text: result.title,
-                        image: result.imageUrl,
-                        price: result.price,
-                        id: result.id
+                        image: result.imageUrl
                     }
                 });
             }
@@ -87,18 +88,3 @@ searchPanel.onSearch = function (query) {
         searchPanel.error = err.message;
     }
 };
-
-
-// resultsPanel.onItemsSelected = function(id) {
-//     try {
-//         logic.retrieve(id, function(error, detail) {
-//             if(error) {
-//                 console.log(error)
-//             } else {
-//                 resultsPanel.hide();
-                
-//             }
-//             }
-//         })
-//     }
-// }
