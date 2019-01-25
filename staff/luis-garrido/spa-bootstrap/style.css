@@ -20,6 +20,10 @@ body {
     max-width: 720px;
     
 }
+.resultList {
+    display: flex;
+    flex-wrap: wrap;
+}
 
 .error {
     display: none;

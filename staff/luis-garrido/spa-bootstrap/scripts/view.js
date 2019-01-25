@@ -212,7 +212,7 @@ Object.defineProperty(RegisterPanel.prototype, 'onGoToLogin', {
 function HomePanel() {
     Panel.call(this, $('<section class="home container border">'
         + '<h2>Welcome, <span class="home__name"></span>!</h2>'
-        + '<button class="home__logout float-right btn btn-primary btn-lg">Logout</button>'
+        + '<button style="margin-bottom: 0.75em;" class="home__logout float-right btn btn-primary btn-lg">Logout</button>'
         + '</section>'));
 
     var $container = this.$element;
@@ -247,8 +247,8 @@ Object.defineProperty(HomePanel.prototype, 'onLogout', {
 function SearchPanel() {
     Panel.call(this, $('<section>'
         + '<form>'
-        + '<input type="text" class="form-control" placeholder="..." name ="query">'
-        + '<button class="btn btn-warning btn-lg" type="submit">Search</button>'
+        + '<input type="text" class="form-control" placeholder="Search for tiny rubber ducklings..." name ="query">'
+        + '<button style="margin-top: 0.75em;" class="btn btn-warning btn-lg" type="submit">Search</button>'
         + '</form>'
         + '</section>'));
 
@@ -264,7 +264,7 @@ function SearchPanel() {
     $container.append(errorPanel.$element);
     this.__errorPanel__ = errorPanel;
 
-    var $resultList = $('<ul></ul>');
+    var $resultList = $('<div class="resultList"><ul></ul></div>');
     $container.append($resultList);
     this.__$resultList__ = $resultList;
 }
