@@ -14,6 +14,16 @@ Panel.prototype.show = function () {
     this.$element.show();
 };
 
+// class Panel {
+//     constructor($element) {
+//         this.$element = $element;
+//     }   
+
+//     hide() { this.$element.hide(); }
+
+//     show() { this.$element.show(); }
+// };
+
 //#endregion
 
 //#region login panel
@@ -248,7 +258,7 @@ function SearchPanel() {
     Panel.call(this, $('<section>'
         + '<form>'
         + '<input type="text" class="form-control" placeholder="Search for tiny rubber ducklings..." name ="query">'
-        + '<button style="margin-top: 0.75em;" class="btn btn-warning btn-lg" type="submit">Search</button>'
+        + '<button style="margin: 0.75em 0;" class="btn btn-warning btn-lg" type="submit">Search</button>'
         + '</form>'
         + '</section>'));
 
@@ -298,7 +308,7 @@ Object.defineProperty(SearchPanel.prototype, 'results', {
         this.__errorPanel__.hide();
 
         results.forEach(function (result) {
-            var $item = $('<li><div class="card col-3" style="max-width: 18rem;"><div class="card-header">' + result.text + ' </div><div class="card-body"><img src="' + result.image + '" width="100%"></div></div></li>');
+            var $item = $('<li><div class="card col-3" style="max-width: 240px;"><div class="card-header">' + result.text + ' </div><div class="card-body"><img src="' + result.image + '" width="100%"></div><div>' + result.price + '</div><div>' + result.id + '</div><button style="margin-bottom: 0.75em;" class="search__view-more float-right btn btn-primary btn-lg">View More</button>           </div></li>');
             this.__$resultList__.append($item);
 
         }.bind(this));

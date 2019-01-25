@@ -72,7 +72,9 @@ searchPanel.onSearch = function (query) {
             } else searchPanel.results = results.map(function (result) {
                 return {
                     text: result.title,
-                    image: result.imageUrl
+                    image: result.imageUrl,
+                    price: result.price,
+                    id: result.id
                 }
             });
         });
