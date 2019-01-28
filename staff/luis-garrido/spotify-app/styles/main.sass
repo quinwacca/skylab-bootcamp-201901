@@ -29,18 +29,20 @@ ul li
         margin: 0 0
         border: none
 
-.artistsList
+.list
     display: flex
     flex-wrap: wrap
     justify-content: space-around
     padding: 0
 
-.artistsCard
+.cards
     display: grid
     grid-template-rows: 15em auto
     grid-template-columns: 15em
     overflow: hidden
     text-align: center
+    border-radius: 50%
+    border: 0 solid black
     &__image
         grid-row-start: 1
         margin: 0 -100%
@@ -50,7 +52,7 @@ ul li
         line-height: 1em
         grid-row-start: 2
         padding-top: 0.2em
-        margin-top: -2em
+        margin-top: -2.5em
         // background: linear-gradient(to top, rgba(24,24,24,1) 0%,rgb(24,24,24,0.1) 100%)
         background-color: rgba(24,24,24,0.4)
 

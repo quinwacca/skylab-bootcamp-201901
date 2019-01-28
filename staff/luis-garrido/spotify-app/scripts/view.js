@@ -39,7 +39,7 @@ class SearchPanel extends Panel {
 class ArtistsPanel extends Panel {
     constructor() {
         super($(`<section class="results">
-    <ul class="artistsList"></ul>
+    <ul class="list"></ul>
 </section`))
 
         this.__$list__ = this.$container.find('ul')
@@ -49,11 +49,11 @@ class ArtistsPanel extends Panel {
         artists.forEach(({ id, name, images }) => {
             const image = images.length!==0?images[0].url:"styles/no-image.png"
             const $artist = $(`<li data-id=${id}>
-    <div class="artistsCard">
-        <div class="artistsCard__image">
+    <div class="cards">
+        <div class="cards__image">
             <img src="${image}" height="100%">
         </div>
-        <div class="artistsCard__name">
+        <div class="cards__name">
             <p>${name}</p>
         </div>
     </div>
@@ -80,7 +80,7 @@ class ArtistsPanel extends Panel {
 class AlbumsPanel extends Panel {
     constructor() {
         super($(`<section class="results">
-    <ul class="artistsList"></ul>
+    <ul class="list"></ul>
 </section`))
 
         this.__$list__ = this.$container.find('ul')
@@ -90,11 +90,11 @@ class AlbumsPanel extends Panel {
         albums.forEach(({ id, name, images }) => {
             const image = images.length!==0?images[0].url:"styles/no-image.png"
             const $album = $(`<li data-id=${id}>
-    <div class="artistsCard">
-        <div class="artistsCard__image">
+    <div class="cards">
+        <div class="cards__image">
             <img src="${image}" height="100%">
         </div>
-        <div class="artistsCard__name">
+        <div class="cards__name">
             <p>${name}</p>
         </div>
     </div>
