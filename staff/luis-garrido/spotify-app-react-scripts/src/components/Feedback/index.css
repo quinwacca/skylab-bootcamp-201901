@@ -1,0 +1,16 @@
+.feedback {
+    border: 1px solid fuchsia;
+    border-radius: 0.5em;
+    background-color: greenyellow;
+    color: black;
+}
+
+.feedback--warn {
+    background-color: orange;
+    color: black;
+}
+
+.feedback--error {
+    background-color: orangered;
+    color: black;
+}
