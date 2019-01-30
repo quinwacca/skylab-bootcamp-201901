@@ -1,9 +1,4 @@
-spotifyApi.token = 'BQCeprrzjL_FOUc_0yzLSB71SbeGtjJDn3vOhtZ7XwW9YwvgFJB9UJ8judIN5JgR-roIdmjZP6S50F4HmCLcLo5cMgnEpgo6xvXZ96vYT_SeyFR_LChqjIGUx5mzvSa5o9xHDpCFxAuKSNtie1JYPIl9MtbhhA'
-let artistsRes = null
-let albumsRes = null
-let tracksRes = null
-let cover = null
-let discName = null
+spotifyApi.token = 'BQCYsHgY6rMPbB-9XuWCOagtA8_q5b1ArucOC6NdjlYHzYP7nTAt5C9_RogyPdRNGsWbfj6gZ5X9uOOWSI5387aW_KNa_zAlr9NQhteppVH0U8xoS-npRjOXcZ3L8Iqq5zz-Kt8AEDrMeo6IpxmUgJg9O_Pd3A'
 
 class Search extends React.Component {
     state = { query: '' }
@@ -33,22 +28,16 @@ class Search extends React.Component {
 }
 
 class Artists extends React.Component {
-    state = { id: '' , artistResults: '' }
+    state = { id: '' }
 
     handleArtistSelection = id => {
-        const { props: { handleAlbumSearch } } = this
-
-        handleAlbumSearch(id)
-    }
-
-    pickArtist = pick => {
-        this.setState({ artistResults: pick})
+        this.props.handleAlbumSearch(id)
     }
 
     render() {
         const { handleArtistSelection } = this
 
-        const res = artistsRes.map(({ name, images, id }) => {
+        const res = this.props.artistsLi.map(({ name, images, id }) => {
             const image = images.length!==0?images[0].url:"styles/no-image.png"
             return (<li key={id} onClick={() => handleArtistSelection(id)}>
                     <div className="cards">
@@ -68,19 +57,16 @@ class Artists extends React.Component {
 }
 
 class Albums extends React.Component {
-    state = { id: '' }
 
     handleAlbumSelection = (id, image, name) => {
-        const { props: { handleTracksSearch } } = this
-        cover = image
-        discName = name
-        handleTracksSearch(id)
+        
+        this.props.handleTracksSearch(id, image, name)
     }
 
     render() {
         const { handleAlbumSelection } = this
     
-        const res = albumsRes.map(({ name, images, id }) => {
+        const res = this.props.albumsLi.map(({ name, images, id }) => {
             const image = images.length!==0?images[0].url:"styles/no-image.png"
             return (<li key={id} onClick={() => handleAlbumSelection(id, image, name)}>
                 <div className="cards">
@@ -96,64 +82,138 @@ class Albums extends React.Component {
         return <section className="results">
             <ul className="list">{res}</ul>
         </section>
-        
     }
 }
 
 class Tracks extends React.Component {
+    
     render() {
-        const res = tracksRes.map(({ id, duration_ms, preview_url, name }) => {
+        const res = this.props.tracksLi.map(({ id, duration_ms, preview_url, name }) => {
             const time = parseInt(duration_ms/(1000*60)%60) + ":" + (parseInt((duration_ms/1000)%60)>9?parseInt((duration_ms/1000)%60):"0"+parseInt((duration_ms/1000)%60))
             return (<li key={id} data-preview={preview_url}>
                 <audio controls>
-                    <source src={preview_url} type="audio/mpeg" />Your browser does not support the audio tag.</audio> {time} - {name}
+                    <source src={preview_url} type="audio/mpeg" controls />Your browser does not support the audio tag.</audio> {time} - {name}
                 </li>)
         })
 
         return <section className="trackList container">
             <div className="trackListCover">
                 <div className="trackListCover__image">
-                    <img src={cover} className="cards__image" height="100%"/>
+                    <img src={this.props.cover} className="cards__image" height="100%"/>
                 </div>
                 <div className="trackListCover__name">
-                        <p>{discName}</p>
+                        <p>{this.props.albumName}</p>
                 </div>
             </div>
             <ul>{res}</ul>
         </section>
     }
+}
+
+class Login extends React.Component {
+    state = { email: '', password: '' }
+
+    handleEmailInput = event => this.setState({ email: event.target.value })
+
+    handlePasswordInput = event => this.setState({ password: event.target.value })
+
+    handleFormSubmit = event => {
+        event.preventDefault()
+
+        const { state: { email, password }, props: { onLogin } } = this
+
+        onLogin(email, password)
+    }
+
+    handleRegisterLink = event => {
+        event.preventDefault()
+
+        this.props.goToRegister()
+    }
+
+    render() {
+        const { handleEmailInput, handlePasswordInput, handleFormSubmit, handleRegisterLink } = this
+
+        return <section className="login">
+            <form onSubmit={handleFormSubmit}>
+                <input type="text" name="email" onChange={handleEmailInput} />
+                <input type="password" name="password" onChange={handlePasswordInput} />
+                <button>Login</button>
+            </form>
+            <a href="#" onClick={handleRegisterLink}>Register</a>
+
+        </section>
+    }
+}
+
+class Register extends React.Component {
+    state = { name: '', surname: '', email: '', password: '', passwordConfirmation: '' }
+
+    handleNameInput = event => this.setState({ name: event.target.value })
+    handleSurnameInput = event => this.setState({ surname: event.target.value })
+    handleEmailInput = event => this.setState({ email: event.target.value })
+    handlePasswordInput = event => this.setState({ password: event.target.value })
+    handlePasswordConfirmationInput = event => this.setState({ passwordConfirmation: event.target.value })
+
+    handleFormSubmit = event => {
+        event.preventDefault()
+        
+        const { state: { name, surname, email, password, passwordConfirmation }, props: { onRegister } } = this
+
+        console.log(name, surname)
+        onRegister(name, surname, email, password, passwordConfirmation)
+    }
+
+    render() {
+        const { handleFormSubmit, handleNameInput, handleSurnameInput, handleEmailInput, handlePasswordInput, handlePasswordConfirmationInput } = this
+
+        return <section className="register">
+            <form onSubmit={handleFormSubmit}>
+                <input type="text" name="name" onChange={handleNameInput} />
+                <input type="text" name="surname" onChange={handleSurnameInput} />
+                <input type="email" name="email" onChange={handleEmailInput} />
+                <input type="password" name="password" onChange={handlePasswordInput} />
+                <input type="password" name="passwordConfirmation" onChange={handlePasswordConfirmationInput} />
+                <button>Register</button>            
+            </form>
+        </section>
+
+    }
 
 }
 
 class App extends React.Component {
-    state = { artists: null , albums: null , tracks: null }
+    state = {
+        loggedUser: null,
+        loginPanel: true,
+        registerPanel: false,
+        artistsSt: null, 
+        albumsSt: null, 
+        tracksSt: null,
+        cover: null,
+        albumName: null,
+        loginFeedback: ''
+    }
 
     updateArtists = artists => {
         if (artists) {
-            artistsRes = artists
-            this.setState({ artists, albums: null , tracks: null })
+            this.setState({ artistsSt: artists, albumsSt: null , tracksSt: null })
         }
-        else {console.log("yo")}
+        else {console.log("artistsFail")}
     }
 
     updateAlbums = albums => {
         if (albums) {
-            albumsRes = albums
-            artistsRes = null
-            tracksRes = null
-            this.setState({ albums , artists: null , tracks: null })
+            this.setState({ albumsSt: albums , artistsSt: null , tracksSt: null })
         }
-        else {console.log("albumsfail")}
+        else {console.log("albumsFail")}
     }
 
-    updateTracks = tracks => {
+    updateTracks = (tracks, image, name) => {
         if (tracks) {
-            tracksRes = tracks
-            albumsRes = null
-            artistsRes = null
-            this.setState({ tracks, artists: null, albums: null })
+            this.setState({ tracksSt: tracks, artistsSt: null, albumsSt: null, cover: image, albumName: name })
         }
-        else { console.log("tracksfail") }
+        else { console.log("tracksFail") }
     }
 
     handleArtistSearch = query => {
@@ -165,7 +225,7 @@ class App extends React.Component {
                 }
             }.bind(this))
         } catch(err) {
-    
+            console.error(err.message)
         }
     }
 
@@ -182,12 +242,12 @@ class App extends React.Component {
         }
     }
 
-    handleTracksSearch = id => {
+    handleTracksSearch = ( id, image, name ) => {
         try {
             logic.retrieveTracks(id, function(error, tracks) {
                 if (error) console.error = error.message
                 else {
-                    this.updateTracks(tracks)
+                    this.updateTracks(tracks, image, name)
                 }
             }.bind(this))
         } catch(err) {
@@ -195,16 +255,42 @@ class App extends React.Component {
         }
     }
 
-    // handleAlbumSelection =
+    handleLogin = (email, password) => {
+        try {
+            logic.login(email, password, user => {
+                this.setState({ loginPanel: false, loggedUser: user })
+            })
+        } catch ({ message }) {
+            console.error(error.message)
+        }
+    }
+
+    handleRegister = (name, surname, email, password, passwordConfirmation) => {
+        try {
+            logic.register(name, surname, email, password, passwordConfirmation, user => {
+                this.setState({ loginPanel: true, registerPanel: false })
+            })
+        } catch ( { message } ) {
+            console.error(error.message)
+        }
+    }
+
+    goToRegister = () => {
+        this.setState({ loginPanel: false, registerPanel: true })
+    }
+
     render() {
        
-        const { handleArtistSearch, handleAlbumSearch, handleTracksSearch} = this
+        const { handleArtistSearch, handleAlbumSearch, handleTracksSearch, handleLogin, handleRegister, goToRegister } = this
+        const { state: { loggedUser, loginPanel, registerPanel, artistsSt, albumsSt, tracksSt, cover, albumName } } = this
 
         return <main className="container-fluid p-3">
-            <Search handleArtistSearch={handleArtistSearch}/>
-            {this.state.artists && <Artists handleAlbumSearch={handleAlbumSearch}/>}
-            {this.state.albums && <Albums handleTracksSearch={handleTracksSearch}/>}
-            {this.state.tracks && <Tracks />}
+            {loginPanel && <Login onLogin={handleLogin} goToRegister={goToRegister}/>}
+            {registerPanel && <Register onRegister={handleRegister}/>}
+            {loggedUser && <section><Search handleArtistSearch={handleArtistSearch}/><h1>{loggedUser.name}</h1></section>}
+            {artistsSt && <Artists artistsLi={artistsSt} handleAlbumSearch={handleAlbumSearch}/>}
+            {albumsSt && <Albums albumsLi={albumsSt} handleTracksSearch={handleTracksSearch}/>}
+            {tracksSt && <Tracks cover={cover} albumName={albumName} tracksLi={tracksSt}/>} 
         </main>
     }
 }
