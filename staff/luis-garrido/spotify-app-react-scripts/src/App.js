@@ -42,6 +42,14 @@ class App extends Component {
       else { console.log("tracksFail") }
   }
 
+  
+//   handleArtistSearch = query => {
+     
+//     logic.searchArtists(query)
+//         .then(artists => this.updateArtists(artists))
+//         .catch(err => console.error(err.message))
+// }
+  
   handleArtistSearch = query => {
       try {
           logic.searchArtists(query, function(error, artists) {

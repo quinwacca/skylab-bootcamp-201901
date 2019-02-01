@@ -10,7 +10,7 @@ class Artists extends Component {
 
     render() {
         const { handleArtistSelection } = this
-        console.log(defaultImage)
+
         const res = this.props.artistsLi.map(({ name, images, id }) => {
             const image = images.length!==0?images[0].url:defaultImage
             return (<li key={id} onClick={() => handleArtistSelection(id)}>

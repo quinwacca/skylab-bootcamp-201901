@@ -8,6 +8,7 @@ const logic = {
      * @param {string} query 
      * @param {function} callback 
      */
+
     searchArtists(query, callback) {
         if (typeof query !== 'string') throw TypeError(`${query} is not a string`)
 
@@ -78,7 +79,13 @@ const logic = {
      * @param {function} callback 
      */
     login: function (email, password, callback) {
-        // TODO validate fields!
+        if (typeof email !== 'string') throw TypeError(email + ' is not a string')
+
+        if (!email.trim().length) throw Error('email cannot be empty')
+
+        if (typeof password !== 'string') throw TypeError(password + ' is not a string')
+
+        if (!password.trim().length) throw Error('password cannot be empty')
     
         var user = users.find(function (user) {
             return user.email === email;
