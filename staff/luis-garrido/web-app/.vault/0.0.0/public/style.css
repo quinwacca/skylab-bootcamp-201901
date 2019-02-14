@@ -1,18 +1,11 @@
-.feedback, .login, .register {
+.feedback, .register {
   border: 1px solid black;
   border-radius: 1em;
   padding: 1em;
   margin: 1em;
 }
 
-.feedback, .login, .register {
-  border: 1px solid black;
-  border-radius: 1em;
-  padding: 1em;
-  margin: 1em;
-}
-
-.feedback, .register, .login {
+.feedback, .register {
   border: 1px solid black;
   border-radius: 1em;
   padding: 1em;
