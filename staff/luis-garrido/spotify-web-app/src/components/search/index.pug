@@ -1,0 +1,46 @@
+extends ../layout
+
+include ../feedback/index
+
+mixin artists(artists)
+  ul
+    each val in artists
+      li
+        form(method='POST', action='/search')
+          button(class='uk-button uk-button-default' type='submit' name='artist' value=val.id)= val.name
+          if (val.images[0])
+            img(src=val.images[0].url width='200px')
+
+mixin albums(albums)
+  ul
+    each val in albums
+      li
+        form(method='POST', action='/search')
+          button(type='submit' name='album' value=val.id)= val.name
+
+mixin tracks(tracks)
+  ul
+    each val in tracks
+      li
+        audio(controls='')
+          source(src=`${val.preview_url}.`, type='audio/mpeg', controls='')
+        span= `${val.duration_ms} - ${val.name}`
+
+block content
+    section.home
+      p= `Welcome! ${name}`
+      form(action='/logout', method='post')
+        button(type='submit') Logout
+      if feedback
+        +feedback(feedback, 'error')
+      section.search.container
+        h2 Search
+        form(method='POST', action='/search')
+          input(type='text', name='query', placeholder='Search an artist...')
+          button(type='submit') Search
+      if artists
+        +artists(artists)
+      if albums
+        +albums(albums)
+      if tracks
+        +tracks(tracks)
