@@ -28,19 +28,32 @@ mixin tracks(tracks)
 
 block content
     section.home
-      p= `Welcome! ${name}`
-      form(action='/logout', method='post')
-        button(type='submit') Logout
+      h2
+        span.home__title= `Welcome ${name}!`
+      form(action='/logout', method='POST')
+        button(class='uk-button uk-button-danger login__button', type='submit') Logout
       if feedback
         +feedback(feedback, 'error')
-      section.search.container
-        h2 Search
-        form(method='POST', action='/search')
-          input(type='text', name='query', placeholder='Search an artist...')
-          button(type='submit') Search
+      section.search
+        form(class='search__form uk-search uk-search-large' method='POST', action='/search')
+          button(uk-search-icon, class='search__form__button uk-search-toggle', type='submit')
+          input(class='search__form__input uk-search-input', type='text', name='query', placeholder='Search an artist...')
       if artists
         +artists(artists)
       if albums
         +albums(albums)
       if tracks
         +tracks(tracks)
+
+
+//-         <div class="uk-margin">
+//-     <form class="uk-search uk-search-default">
+//-         <a href="" uk-search-icon></a>
+//-         <input class="uk-search-input" type="search" placeholder="Search...">
+//-     </form>
+//- </div>
+
+
+//- <form class="uk-search uk-search-large">...</form>
+
+//- <a class="uk-search-toggle" href="" uk-search-icon></a>

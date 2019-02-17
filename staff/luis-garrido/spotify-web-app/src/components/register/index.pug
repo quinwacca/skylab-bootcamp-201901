@@ -4,17 +4,34 @@ include ../feedback/index
 
 block content
     section.register
-      h2 Register
+      h2
+        span.register__title Register
       form(method='POST', action='/register')
-        input(name='name', type='text', placeholder='name', required='')
-        input(name='surname', type='text', placeholder='surname', required='')
-        input(name='email', type='email', placeholder='email', required='')
-        input(name='password', type='password', placeholder='password', required='')
-        input(name='passwordConfirm', type='password', placeholder='confirm password', required='')
-        button(type='submit') Register
+        div.uk-margin
+          div.uk-inline
+            span(class='uk-form-icon', uk-icon='icon: user')
+            input(class='uk-input', name='name', type='text', placeholder='name', required='')
+        div.uk-margin
+          div.uk-inline
+            span(class='uk-form-icon', uk-icon='icon: user')
+            input(class='uk-input', name='surname', type='text', placeholder='surname', required='')
+        div.uk-margin
+          div.uk-inline
+            span(class='uk-form-icon', uk-icon='icon: mail')
+            input(class='uk-input', name='email', type='email', placeholder='email', required='')
+        div.uk-margin
+          div.uk-inline
+            span(class='uk-form-icon', uk-icon='icon: lock')
+            input(class='uk-input', name='password', type='password', placeholder='password', required='')
+        div.uk-margin
+          div.uk-inline
+            span(class='uk-form-icon', uk-icon='icon: unlock')
+            input(class='uk-input', name='passwordConfirm', type='password', placeholder='confirm password', required='')
+        div.uk-margin
+          button(class='uk-button uk-button-danger register__button', type='submit') Register
       if feedback
         +feedback(feedback, 'warn')
       | Go 
-      a(href='/') Home
+      a(class='login__link', href='/') Home
       |  or 
-      a(href='/login') Login
+      a(class='login__link', href='/login') Login

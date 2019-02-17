@@ -11525,18 +11525,41 @@ h3 {
     page-break-after: avoid;
   }
 }
-.feedback, .landing, .home, .register {
-  border: 1px solid black;
-  border-radius: 1em;
-  padding: 1em;
-  margin: 1em;
+.register {
+  font-family: "Muli", sans-serif;
+  box-sizing: border-box;
+  margin: auto;
+  text-align: center;
+  color: black;
+  background: rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  padding: 1em 3em;
+  border-radius: 60em;
+  box-shadow: 10px 20px 50px black;
+  padding: 1.5em;
 }
-
-.feedback, .landing, .home, .register {
-  border: 1px solid black;
-  border-radius: 1em;
-  padding: 1em;
-  margin: 1em;
+.register__title {
+  color: black;
+  font-family: "Coiny", cursive;
+  text-transform: uppercase;
+  background: linear-gradient(160deg, black 0%, #820000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.register__button {
+  font-weight: 800;
+}
+.register__button:hover {
+  background: linear-gradient(200deg, #c9009a 0%, tomato 100%);
+}
+.register__link {
+  color: #ff7391;
+  font-weight: 800;
+}
+.register__link:hover {
+  text-decoration: none;
+  color: white;
+  background: linear-gradient(200deg, #c9009a 0%, tomato 100%);
 }
 
 .login {
@@ -11545,33 +11568,93 @@ h3 {
   margin: auto;
   text-align: center;
   color: black;
-  background: rgba(0, 0, 0, 0.3);
-  max-width: 600px;
+  background: rgba(0, 0, 0, 0.2);
+  max-width: 500px;
   padding: 1em 3em;
+  border-radius: 60em;
+  box-shadow: 10px 20px 50px black;
+  padding: 1.5em;
 }
 .login__title {
   color: black;
   font-family: "Coiny", cursive;
   text-transform: uppercase;
+  background: linear-gradient(160deg, black 0%, #820000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .login__button {
-  margin: 1em;
+  font-weight: 800;
 }
-.feedback, .landing, .home, .register {
+.login__button:hover {
+  background: linear-gradient(200deg, #c9009a 0%, tomato 100%);
+}
+.login__link {
+  color: #ff7391;
+  font-weight: 800;
+}
+.login__link:hover {
+  text-decoration: none;
+  color: white;
+  background: linear-gradient(200deg, #c9009a 0%, tomato 100%);
+}
+
+.home {
+  font-family: "Muli", sans-serif;
+  box-sizing: border-box;
+  margin: auto;
+  text-align: center;
+  color: black;
+  background: rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+  height: 100%;
+  padding: 1em 3em;
+  border-top-left-radius: 200px;
+  border-top-right-radius: 200px;
+  box-shadow: 10px 20px 50px black;
+  padding: 1.5em;
+}
+.home__title {
+  color: black;
+  font-family: "Coiny", cursive;
+  text-transform: uppercase;
+  background: linear-gradient(160deg, black 0%, #820000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.home__button {
+  font-weight: 800;
+}
+.home__button:hover {
+  background: linear-gradient(200deg, #c9009a 0%, tomato 100%);
+}
+.home__link {
+  color: #ff7391;
+  font-weight: 800;
+}
+.home__link:hover {
+  text-decoration: none;
+  color: white;
+  background: linear-gradient(200deg, #c9009a 0%, tomato 100%);
+}
+
+.search__form {
+  background: linear-gradient(200deg, rgba(201, 0, 154, 0.2) 0%, #ffd7ff 100%);
+  border-radius: 5em;
+  width: 80%;
+}
+.search__form__input::placeholder {
+  color: white;
+}
+
+.feedback, .landing {
   border: 1px solid black;
   border-radius: 1em;
   padding: 1em;
   margin: 1em;
 }
 
-.feedback, .landing, .register, .home {
-  border: 1px solid black;
-  border-radius: 1em;
-  padding: 1em;
-  margin: 1em;
-}
-
-.feedback, .register, .home, .landing {
+.feedback, .landing {
   border: 1px solid black;
   border-radius: 1em;
   padding: 1em;
@@ -11588,16 +11671,19 @@ h3 {
   background-color: tomato;
 }
 
-.register, .home, .landing, .feedback {
+.landing, .feedback {
   border: 1px solid black;
   border-radius: 1em;
   padding: 1em;
   margin: 1em;
 }
 
-.main {
+html {
   background: linear-gradient(135deg, #c9009a 0%, #ff6668 42%, #ff6668 57%, red 100%);
-  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.5), transparent 100px), radial-gradient(circle at top right, rgba(255, 255, 255, 0.5), transparent 100px), radial-gradient(at bottom left, rgba(255, 0, 255, 0.5), transparent 400px), radial-gradient(at bottom right, rgba(255, 100, 100, 0.5), transparent 400px);
+}
+
+.main {
+  background: radial-gradient(farthest-side at bottom left, rgba(50, 10, 255, 0.5), transparent), radial-gradient(farthest-corner at bottom right, rgba(255, 50, 50, 0.5), transparent 400px);
 }
 
 .container__title {
@@ -11605,6 +11691,9 @@ h3 {
   color: black;
   font-family: "Coiny", cursive;
   margin-top: 0.5em;
+  background: linear-gradient(160deg, black 40%, #c9009a 60%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /*# sourceMappingURL=style.css.map */

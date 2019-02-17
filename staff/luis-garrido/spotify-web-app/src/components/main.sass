@@ -1,8 +1,10 @@
 @import panel
 
-.main
+html
     background: linear-gradient(135deg, rgb(201,0,154) 0%,rgb(255,102,104) 42%,rgb(255,102,104) 57%,rgb(255,0,0) 100%)
-    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.5), transparent 100px), radial-gradient(circle at top right, rgba(255, 255, 255, 0.5), transparent 100px), radial-gradient(at bottom left, rgba(255, 0, 255, 0.5), transparent 400px), radial-gradient(at bottom right, rgba(255, 100, 100, 0.5), transparent 400px)
+
+.main
+    background: radial-gradient(farthest-side at bottom left, rgba(50, 10, 255, 0.5), transparent), radial-gradient(farthest-corner at bottom right, rgba(255, 50, 50, 0.5), transparent 400px)
 
 .container    
     &__title
@@ -10,3 +12,7 @@
         color: black
         font-family: 'Coiny', cursive
         margin-top: 0.5em
+        // text-transform: uppercase
+        background: linear-gradient(160deg, rgb(0,0,0) 40%, rgb(201,0,154) 60%)
+        -webkit-background-clip: text
+        -webkit-text-fill-color: transparent

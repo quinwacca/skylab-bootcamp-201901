@@ -3,18 +3,20 @@ extends ../layout
 include ../feedback/index
 
 block content
-    section(class='login')
-      h2.login__title Login
+    section.login
+      h2
+        span.login__title Login
       form(method='POST', action='/login')
         div.uk-margin
           div.uk-inline
-            span(class='uk-form-icon', uk-icon='icon: user')
+            span(class='uk-form-icon', uk-icon='icon: mail')
             input(class='uk-input', name='email', type='email', required='')
         div.uk-margin
           div.uk-inline
             span(class='uk-form-icon uk-form-icon-flip', uk-icon='icon: lock')
             input(class='uk-input', name='password', type='password', required='')
-        button(class='uk-button uk-button-danger login__button', type='submit') Log in
+        div.uk-margin
+          button(class='uk-button uk-button-danger login__button', type='submit') Log in
       if feedback
         +feedback(feedback, 'error')
       | Go 

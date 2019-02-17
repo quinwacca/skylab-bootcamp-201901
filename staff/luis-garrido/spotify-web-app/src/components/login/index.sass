@@ -1,20 +1,30 @@
-@import ../panel
-
 .login
     font-family: 'Muli', sans-serif
     box-sizing: border-box
     margin: auto
     text-align: center
     color: black
-    background: rgba(0,0,0,0.3)
-    max-width: 600px
+    background: rgba(0,0,0,0.2)
+    max-width: 500px
     padding: 1em 3em
+    border-radius: 60em
+    box-shadow: 10px 20px 50px rgb(0,0,0)
+    padding: 1.5em
     &__title
         color: black
         font-family: 'Coiny', cursive
         text-transform: uppercase
+        background: linear-gradient(160deg, rgb(0,0,0) 0%, rgb(130,0,0) 100%)
+        -webkit-background-clip: text
+        -webkit-text-fill-color: transparent
     &__button
-        margin: 1em
+        font-weight: 800
+    &__button:hover
+        background: linear-gradient(200deg, rgb(201,0,154) 0%, tomato 100%)
     &__link
-
-
+        color: rgb(255,115,145)
+        font-weight: 800
+    &__link:hover
+        text-decoration: none
+        color: white
+        background: linear-gradient(200deg, rgb(201,0,154) 0%, tomato 100%)
