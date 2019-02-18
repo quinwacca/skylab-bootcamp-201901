@@ -4,19 +4,35 @@ include ../feedback/index
 
 mixin artists(artists)
   ul
-    each val in artists
-      li
-        form(method='POST', action='/search')
-          button(class='uk-button uk-button-default' type='submit' name='artist' value=val.id)= val.name
-          if (val.images[0])
-            img(src=val.images[0].url width='200px')
+    div(class='uk-grid uk-child-width-1-1 uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l')
+      each val in artists
+        div
+          li
+            div.card
+              div(class='card__image hexagon uk-width-expand')
+                if (val.images[0])
+                  img(class='content', src=val.images[0].url width='100%')
+                else
+                  img(class='content', src='https://cdn.pixabay.com/photo/2017/02/22/17/59/paint-2090112_960_720.jpg', width='100%')
+              div.card__name
+                form(method='POST', action='/search')
+                  button(class='card__button uk-button uk-button-default' type='submit' name='artist' value=val.id)= val.name
 
 mixin albums(albums)
   ul
-    each val in albums
-      li
-        form(method='POST', action='/search')
-          button(type='submit' name='album' value=val.id)= val.name
+    div(class='uk-grid uk-child-width-1-1 uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l')
+      each val in albums
+        div
+          li
+            div.card
+              div(class='card__image hexagon uk-width-expand')
+                if (val.images[0])
+                  img(class='content', src=val.images[0].url width='100%')
+                else
+                  img(class='content', src='https://cdn.pixabay.com/photo/2017/02/22/17/59/paint-2090112_960_720.jpg', width='200px')
+              div.card__name
+                form(method='POST', action='/search')
+                  button(class='card__button uk-button uk-button-default' type='submit' name='album' value=val.id)= val.name
 
 mixin tracks(tracks)
   ul
@@ -28,13 +44,13 @@ mixin tracks(tracks)
 
 block content
     section.home
-      h2
-        span.home__title= `Welcome ${name}!`
       form(action='/logout', method='POST')
-        button(class='uk-button uk-button-danger login__button', type='submit') Logout
+        h3
+          span.home__title= `Welcome ${name}! `
+          button(class='uk-button uk-button-danger login__button', type='submit') Logout
       if feedback
         +feedback(feedback, 'error')
-      section.search
+      section(class='search uk-sticky')
         form(class='search__form uk-search uk-search-large' method='POST', action='/search')
           button(uk-search-icon, class='search__form__button uk-search-toggle', type='submit')
           input(class='search__form__input uk-search-input', type='text', name='query', placeholder='Search an artist...')

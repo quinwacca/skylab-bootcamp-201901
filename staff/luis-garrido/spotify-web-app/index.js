@@ -142,6 +142,36 @@ app.get('/search', (req, res) => {
     }
 })
 
+// app.get('/search/:query', formBodyParser, (req, res) => {
+//     req.session.albums = null
+//     req.session.tracks = null
+    
+//     try {
+//         const { params: { query } , session: { feedback, artists, albums, tracks } } = req
+//         console.log(query)
+        
+//         const logic = logicFactory.create(req)
+//         console.log(query)
+//         logic.searchArtists(query)
+//             .then((artists) => {
+//                 req.session.artists = artists
+    
+//                 res.render('search', {feedback, name, artists, albums, tracks})
+//                 // res.redirect('/search')
+//             })
+//             .catch(({ message }) => {
+//                 req.session.feedback = message
+    
+//                 res.redirect('/login')
+//                 })
+//         } catch ({ message }) {
+//             req.session.feedback = message
+    
+//             res.redirect('/login')
+//         }
+
+// })
+
 app.post('/search', formBodyParser, (req, res) => {
     const { body: { query, artist, album } } = req
     const logic = logicFactory.create(req)
