@@ -19,6 +19,6 @@ app.post('/authenticate', jsonBodyParser, authenticate.post)
 
 app.get(`/retrieve/:userId`, retrieve.get)
 
-// app.get('*', notFound.get)
+app.get('/*', notFound.get)
 
 app.listen(port, () => console.log(`server running on port ${port}`))

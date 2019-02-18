@@ -11,7 +11,7 @@ module.exports = {
         get: require('./retrieve/get')
     },
 
-    // notFound: {
-    //     get: require('./not-found/get')
-    // }
+    notFound: {
+        get: require('./not-found/get')
+    }
 }
