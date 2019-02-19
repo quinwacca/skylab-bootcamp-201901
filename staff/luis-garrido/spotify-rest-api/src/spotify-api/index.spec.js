@@ -31,6 +31,12 @@ describe('spotify api', () => {
 
             expect(() => spotifyApi.searchArtists(query)).toThrowError('query is empty')
         })
+
+        it('should fail on non string query', function () {
+            const query = 123
+
+            expect(() => spotifyApi.retrieveTrack(query)).toThrowError(`${query} is not a string`)
+        })
     })
 
     describe('retrieve artist', () => {
@@ -48,6 +54,12 @@ describe('spotify api', () => {
             const artistId = ''
 
             expect(() => spotifyApi.retrieveArtist(artistId)).toThrowError('artistId is empty')
+        })
+
+        it('should fail on non string artistId', function () {
+            const artistId = 123
+
+            expect(() => spotifyApi.retrieveTrack(artistId)).toThrowError(`${artistId} is not a string`)
         })
     })
 
@@ -68,6 +80,12 @@ describe('spotify api', () => {
 
             expect(() => spotifyApi.retrieveAlbums(artistId)).toThrowError('artistId is empty')
         })
+
+        it('should fail on non string artistId', function () {
+            const artistId = 123
+
+            expect(() => spotifyApi.retrieveTrack(artistId)).toThrowError(`${artistId} is not a string`)
+        })
     })
 
     describe('retrieve album', () => {
@@ -85,6 +103,12 @@ describe('spotify api', () => {
             const albumId = ''
 
             expect(() => spotifyApi.retrieveAlbum(albumId)).toThrowError('albumId is empty')
+        })
+
+        it('should fail on non string albumId', function () {
+            const albumId = 123
+
+            expect(() => spotifyApi.retrieveTrack(albumId)).toThrowError(`${albumId} is not a string`)
         })
     })
 
@@ -104,6 +128,12 @@ describe('spotify api', () => {
             const albumId = ''
 
             expect(() => spotifyApi.retrieveTracks(albumId)).toThrowError('albumId is empty')
+        })
+
+        it('should fail on non string albumId', function () {
+            const albumId = 123
+
+            expect(() => spotifyApi.retrieveTrack(albumId)).toThrowError(`${albumId} is not a string`)
         })
     })
 
@@ -127,6 +157,12 @@ describe('spotify api', () => {
             const trackId = ''
 
             expect(() => spotifyApi.retrieveTrack(trackId)).toThrowError('trackId is empty')
+        })
+
+        it('should fail on non string trackId', function () {
+            const trackId = 123
+
+            expect(() => spotifyApi.retrieveTrack(trackId)).toThrowError(`${trackId} is not a string`)
         })
     })
 })

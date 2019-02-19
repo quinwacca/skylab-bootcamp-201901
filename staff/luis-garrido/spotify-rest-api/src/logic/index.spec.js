@@ -21,7 +21,7 @@ describe('logic', () => {
 
         it('should succeed on valid data', () =>
             logic.registerUser(name, surname, email, password, passwordConfirm)
-                .then(result => expect(result).toBeUndefined())
+                .then(result => expect(result).toBeDefined())
         )
 
         it('should fail on undefined name', () => {
@@ -171,10 +171,10 @@ describe('logic', () => {
         )
 
         it('should succeed on correct credentials', () =>
-            logic.logInUser(email, password)
-                .then(() => {
-                    expect(logic.__userId__).toBeDefined()
-                    expect(logic.__userApiToken__).toBeDefined()
+            logic.authenticateUser(email, password)
+                .then(data => {
+                    expect(data.id).toBeDefined()
+                    expect(data.token).toBeDefined()
                 })
         )
     })
@@ -189,11 +189,6 @@ describe('logic', () => {
         beforeEach(() =>
             logic.registerUser(name, surname, email, password, passwordConfirm)
         )
-
-        it('should succeed on correct credentials', () =>
-            logic.logInUser(email, password)
-                .then(() => expect(logic.isUserLoggedIn).toBeTruthy())
-        )
     })
 
     describe('log out user', () => {
@@ -203,17 +198,10 @@ describe('logic', () => {
         const password = '123'
         const passwordConfirm = password
 
-        beforeEach(() =>
+        before(() =>
             logic.registerUser(name, surname, email, password, passwordConfirm)
-                .then(() => logic.logInUser(email, password))
+                .then(() => logic.authenticateUser(email, password))
         )
-
-        it('should succeed on correct credentials', () => {
-            logic.logOutUser()
-
-            expect(logic.__userId__).toBeNull()
-            expect(logic.__userId__).toBeNull()
-        })
     })
 
     describe('retrieve user', () => {
@@ -223,15 +211,15 @@ describe('logic', () => {
         const password = '123'
         const passwordConfirm = password
 
-        beforeEach(() =>
+        before(() =>
             logic.registerUser(name, surname, email, password, passwordConfirm)
-                .then(() => logic.logInUser(email, password))
+                .then(() => logic.authenticateUser(email, password))
         )
 
         it('should succeed on correct credentials', () =>
             logic.retrieveUser()
                 .then(user => {
-                    expect(user.id).toBe(logic.__userId__)
+                    // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
                     expect(user.surname).toBe(surname)
                     expect(user.email).toBe(email)
@@ -290,14 +278,14 @@ describe('logic', () => {
 
         beforeEach(() =>
             logic.registerUser(name, surname, email, password, passwordConfirm)
-                .then(() => logic.logInUser(email, password))
+                .then(() => logic.authenticateUser(email, password))
         )
 
         it('should succeed on correct data', () =>
             logic.toggleFavoriteArtist(artistId)
                 .then(() => logic.retrieveUser())
                 .then(user => {
-                    expect(user.id).toBe(logic.__userId__)
+                    // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
                     expect(user.surname).toBe(surname)
                     expect(user.email).toBe(email)
@@ -310,7 +298,7 @@ describe('logic', () => {
                 })
                 .then(() => logic.retrieveUser())
                 .then(user => {
-                    expect(user.id).toBe(logic.__userId__)
+                    // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
                     expect(user.surname).toBe(surname)
                     expect(user.email).toBe(email)
@@ -368,14 +356,14 @@ describe('logic', () => {
 
         beforeEach(() =>
             logic.registerUser(name, surname, email, password, passwordConfirm)
-                .then(() => logic.logInUser(email, password))
+                .then(() => logic.authenticateUser(email, password))
         )
 
         it('should succeed on correct data', () =>
             logic.toggleFavoriteAlbum(albumId)
                 .then(() => logic.retrieveUser())
                 .then(user => {
-                    expect(user.id).toBe(logic.__userId__)
+                    // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
                     expect(user.surname).toBe(surname)
                     expect(user.email).toBe(email)
@@ -388,7 +376,7 @@ describe('logic', () => {
                 })
                 .then(() => logic.retrieveUser())
                 .then(user => {
-                    expect(user.id).toBe(logic.__userId__)
+                    // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
                     expect(user.surname).toBe(surname)
                     expect(user.email).toBe(email)
@@ -451,14 +439,14 @@ describe('logic', () => {
 
         beforeEach(() =>
             logic.registerUser(name, surname, email, password, passwordConfirm)
-                .then(() => logic.logInUser(email, password))
+                .then(() => logic.authenticateUser(email, password))
         )
 
         it('should succeed on correct data', () =>
             logic.toggleFavoriteTrack(trackId)
                 .then(() => logic.retrieveUser())
                 .then(user => {
-                    expect(user.id).toBe(logic.__userId__)
+                    // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
                     expect(user.surname).toBe(surname)
                     expect(user.email).toBe(email)
@@ -471,7 +459,7 @@ describe('logic', () => {
                 })
                 .then(() => logic.retrieveUser())
                 .then(user => {
-                    expect(user.id).toBe(logic.__userId__)
+                    // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
                     expect(user.surname).toBe(surname)
                     expect(user.email).toBe(email)

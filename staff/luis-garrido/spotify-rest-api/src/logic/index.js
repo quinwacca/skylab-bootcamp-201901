@@ -33,11 +33,11 @@ const logic = {
         
         if (!password.trim().length) throw Error('password cannot be empty')
         
-        // if (typeof passwordConfirmation !== 'string') throw TypeError(passwordConfirmation + ' is not a string')
+        if (typeof passwordConfirmation !== 'string') throw TypeError(passwordConfirmation + ' is not a string')
         
-        // if (!passwordConfirmation.trim().length) throw Error('password confirmation cannot be empty')
+        if (!passwordConfirmation.trim().length) throw Error('password confirmation cannot be empty')
         
-        // if (password !== passwordConfirmation) throw Error('passwords do not match')
+        if (password !== passwordConfirmation) throw Error('passwords do not match')
         
         return userApi.register(name, surname, email, password)
             // .then(() => { })
