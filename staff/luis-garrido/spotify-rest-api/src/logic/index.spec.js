@@ -210,14 +210,20 @@ describe('logic', () => {
         const email = `manuelbarzi@mail.com-${Math.random()}`
         const password = '123'
         const passwordConfirm = password
+        let id
+        let token
 
-        before(() =>
+        beforeEach(() =>
             logic.registerUser(name, surname, email, password, passwordConfirm)
                 .then(() => logic.authenticateUser(email, password))
+                .then(data => {
+                    id = data.id
+                    token = data.token
+                })
         )
 
         it('should succeed on correct credentials', () =>
-            logic.retrieveUser()
+            logic.retrieveUser(id, token)
                 .then(user => {
                     // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
@@ -275,15 +281,21 @@ describe('logic', () => {
         const password = '123'
         const passwordConfirm = password
         const artistId = '6tbjWDEIzxoDsBA1FuhfPW' // madonna
+        let id
+        let token
 
         beforeEach(() =>
             logic.registerUser(name, surname, email, password, passwordConfirm)
                 .then(() => logic.authenticateUser(email, password))
+                .then(data => {
+                    id = data.id
+                    token = data.token
+                })
         )
 
         it('should succeed on correct data', () =>
-            logic.toggleFavoriteArtist(artistId)
-                .then(() => logic.retrieveUser())
+            logic.toggleFavoriteArtist(id, token, artistId)
+                .then(() => logic.retrieveUser(id, token))
                 .then(user => {
                     // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
@@ -294,9 +306,9 @@ describe('logic', () => {
                     expect(user.favoriteArtists.length).toBe(1)
                     expect(user.favoriteArtists[0]).toBe(artistId)
 
-                    return logic.toggleFavoriteArtist(artistId)
+                    return logic.toggleFavoriteArtist(id, token, artistId)
                 })
-                .then(() => logic.retrieveUser())
+                .then(() => logic.retrieveUser(id, token))
                 .then(user => {
                     // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
@@ -353,15 +365,21 @@ describe('logic', () => {
         const password = '123'
         const passwordConfirm = password
         const albumId = '4hBA7VgOSxsWOf2N9dJv2X' // Rebel Heart Tour (Live)
+        let id
+        let token
 
         beforeEach(() =>
             logic.registerUser(name, surname, email, password, passwordConfirm)
                 .then(() => logic.authenticateUser(email, password))
+                .then(data => {
+                    id = data.id
+                    token = data.token
+                })
         )
 
         it('should succeed on correct data', () =>
-            logic.toggleFavoriteAlbum(albumId)
-                .then(() => logic.retrieveUser())
+            logic.toggleFavoriteAlbum(id, token, albumId)
+                .then(() => logic.retrieveUser(id, token))
                 .then(user => {
                     // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
@@ -372,9 +390,9 @@ describe('logic', () => {
                     expect(user.favoriteAlbums.length).toBe(1)
                     expect(user.favoriteAlbums[0]).toBe(albumId)
 
-                    return logic.toggleFavoriteAlbum(albumId)
+                    return logic.toggleFavoriteAlbum(id, token, albumId)
                 })
-                .then(() => logic.retrieveUser())
+                .then(() => logic.retrieveUser(id, token))
                 .then(user => {
                     // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
@@ -436,15 +454,21 @@ describe('logic', () => {
         const password = '123'
         const passwordConfirm = password
         const trackId = '5U1tMecqLfOkPDIUK9SVKa' // Rebel Heart Tour Intro - Live)
-
+        let id
+        let token
+        
         beforeEach(() =>
             logic.registerUser(name, surname, email, password, passwordConfirm)
                 .then(() => logic.authenticateUser(email, password))
+                .then(data => {
+                    id = data.id
+                    token = data.token
+                })
         )
 
         it('should succeed on correct data', () =>
-            logic.toggleFavoriteTrack(trackId)
-                .then(() => logic.retrieveUser())
+            logic.toggleFavoriteTrack(id, token, trackId)
+                .then(() => logic.retrieveUser(id, token))
                 .then(user => {
                     // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
@@ -455,9 +479,9 @@ describe('logic', () => {
                     expect(user.favoriteTracks.length).toBe(1)
                     expect(user.favoriteTracks[0]).toBe(trackId)
 
-                    return logic.toggleFavoriteTrack(trackId)
+                    return logic.toggleFavoriteTrack(id, token, trackId)
                 })
-                .then(() => logic.retrieveUser())
+                .then(() => logic.retrieveUser(id, token))
                 .then(user => {
                     // expect(user.id).toBe(logic.__userId__)
                     expect(user.name).toBe(name)
