@@ -12,19 +12,25 @@ const artistComment = {
     "file": file,
 
     read(fileToRead) {
+        if (!(typeof fileToRead === 'string')) throw TypeError (`${fileToRead} is not a string`)
+        if (fileToRead.trim().length === 0) throw Error (`${fileToRead} is empty`)
+
         return readFile(fileToRead, { encoding: "utf-8" }).then(fileData =>
             JSON.parse(fileData)
         );
     },
 
     write(fileToWrite, dataToStringify) {
+        if (!(dataToStringify instanceof Array)) throw TypeError (`${dataToStringify} is not an array`)
+        
         const dataToSave = JSON.stringify(dataToStringify, null, 4);
-        return writeFile(fileToWrite, dataToSave).then(() =>
-            console.log("File saved!")
-        );
+        return writeFile(fileToWrite, dataToSave)
     },
 
     add(comment) {
+        if (!(typeof comment === 'object')) throw TypeError (`${comment} is not an object`)
+        if (comment.length === 0) throw Error (`${comment} is empty`)
+        
         comment.id = uuid();
         return this.read(file)
             .then(fileData => {
@@ -38,6 +44,9 @@ const artistComment = {
     },
 
     retrieve(commentId) {
+        if (!(typeof commentId === 'string')) throw TypeError (`${commentId} is not a string`)
+        if (commentId.trim().length === 0) throw Error (`${commentId} is empty`)
+
         return this.read(file)
             .then(fileData =>
                 fileData.find(comment => comment.id === commentId)
