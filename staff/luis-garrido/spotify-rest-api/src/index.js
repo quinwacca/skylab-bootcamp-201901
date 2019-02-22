@@ -1,53 +1,48 @@
-require("dotenv").config();
+require('dotenv').config()
 
-require("isomorphic-fetch");
+require('isomorphic-fetch')
 
-const express = require("express");
-const bodyParser = require("body-parser");
+const { MongoClient } = require('mongodb')
+const express = require('express')
+const bodyParser = require('body-parser')
+const spotifyApi = require('./spotify-api')
 
-const {
-    register,
-    authenticate,
-    retrieve,
-    notFound,
-    searchArtist,
-    retrieveArtist,
-    retrieveAlbums,
-    retrieveAlbum,
-    retrieveTracks,
-    retrieveTrack
-} = require("./routes");
+const { registerUser, authenticateUser, retrieveUser, searchArtists, addCommentToArtist, listCommentsFromArtist, notFound } = require('./routes')
 
-const {
-    env: { PORT, SPOTIFY_API_TOKEN },
-    argv: [, , port = PORT || 8080]
-} = process;
+const { env: { DB_URL, PORT, SPOTIFY_API_TOKEN }, argv: [, , port = PORT || 8080] } = process
 
-const app = express();
+MongoClient.connect(DB_URL, { useNewUrlParser: true })
+    .then(client => {
+        spotifyApi.token = SPOTIFY_API_TOKEN
 
-const jsonBodyParser = bodyParser.json();
+        const app = express()
 
-const spotifyApi = require("./spotify-api");
-spotifyApi.token = SPOTIFY_API_TOKEN;
+        const jsonBodyParser = bodyParser.json()
 
-app.post("/register", jsonBodyParser, register.post);
+        const router = express.Router()
 
-app.post("/authenticate", jsonBodyParser, authenticate.post);
+        router.post('/user', jsonBodyParser, registerUser)
 
-app.get(`/retrieve/:userId`, retrieve.get);
+        router.post('/user/auth', jsonBodyParser, authenticateUser)
 
-app.get("/search/:query", searchArtist.get);
+        router.get('/user/:id', retrieveUser)
 
-app.get("/artist/:artistId", retrieveArtist.get);
+        router.get('/artists', searchArtists)
 
-app.get("/artist/:artistId/albums", retrieveAlbums.get);
+        router.post('/artist/:artistId/comment', jsonBodyParser, addCommentToArtist)
 
-app.get("/album/:albumId", retrieveAlbum.get);
+        router.get('/artist/:artistId/comment', listCommentsFromArtist)
 
-app.get("/album/:albumId/tracks", retrieveTracks.get);
+        // router.get('/artist/:id', retrieveArtist)
 
-app.get("/track/:trackId", retrieveTrack.get);
+        // router.get('/album/:id', retrieveAlbum)
 
-app.get("/*", notFound.get);
+        // router.get('/track/:id', retrieveTrack)
 
-app.listen(port, () => console.log(`server running on port ${port}`));
+        // app.get('*', notFound)
+
+        app.use('/api', router)
+
+        app.listen(port, () => console.log(`server running on port ${port}`))
+    })
+    .catch(console.error)
