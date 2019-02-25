@@ -6,7 +6,12 @@ module.exports = (req, res) => {
     try {
         logic.searchArtists(q)
             // .then(artists => res.json(artists))
-            .then(res.json.bind(res))
+            .then(res => {
+                console.log(res)
+                const marc = res.json()
+                console.log(marc)
+                return marc
+            })
             .catch(({ message }) => {
                 res.status(400).json({
                     error: message

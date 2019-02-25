@@ -14,6 +14,13 @@ const { registerUser, authenticateUser, retrieveUser, searchArtists, addCommentT
 
 const { env: { DB_URL, PORT, SPOTIFY_API_TOKEN, JWT_SECRET }, argv: [, , port = PORT || 8080] } = process
 
+var refresh = require('spotify-refresh')
+ 
+refresh(refreshToken, clientID, clientSecret, function (err, res, body) { 
+  if (err) return
+  body = json.parse(body)
+  console.log(JSON.stringify(body))
+})
 
 MongoClient.connect(DB_URL, { useNewUrlParser: true })
     .then(client => {

@@ -14,7 +14,8 @@ class Home extends Component {
     state = { query: null, artistId: null, albumId: null, trackId: null, searchFeedback: null }
 
     handleSearch = query => {
-        this.setState({ query }, () => this.props.history.push(`/search/${query}`))
+        this.setState({ query })
+        return this.props.history.push(`/search/${query}`)
     }
 
     handleArtistSelected = artistId => this.setState({ artistId }, () => {
