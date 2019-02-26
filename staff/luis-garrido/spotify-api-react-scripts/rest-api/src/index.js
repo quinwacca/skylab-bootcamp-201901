@@ -12,15 +12,7 @@ const cors = require('cors')
 
 const { registerUser, authenticateUser, retrieveUser, searchArtists, addCommentToArtist, listCommentsFromArtist, notFound } = require('./routes')
 
-const { env: { DB_URL, PORT, SPOTIFY_API_TOKEN, JWT_SECRET }, argv: [, , port = PORT || 8080] } = process
-
-var refresh = require('spotify-refresh')
- 
-refresh(refreshToken, clientID, clientSecret, function (err, res, body) { 
-  if (err) return
-  body = json.parse(body)
-  console.log(JSON.stringify(body))
-})
+const { env: { DB_URL, PORT, SPOTIFY_API_TOKEN, JWT_SECRET, CLIENT_ID, CLIENT_SECRET }, argv: [, , port = PORT || 8080] } = process
 
 MongoClient.connect(DB_URL, { useNewUrlParser: true })
     .then(client => {
@@ -28,6 +20,9 @@ MongoClient.connect(DB_URL, { useNewUrlParser: true })
         users.collection = db.collection('users')
 
         spotifyApi.token = SPOTIFY_API_TOKEN
+        spotifyApi.CLIENT_ID = CLIENT_ID
+        spotifyApi.CLIENT_SECRET = CLIENT_SECRET
+        
         logic.jwtSecret = JWT_SECRET
 
         const app = express()

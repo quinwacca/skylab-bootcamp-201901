@@ -9,9 +9,11 @@ import logic from './logic'
 import './index.sass'
 
 // const { env: { REACT_APP_SPOTIFY_API_TOKEN } } = process // WARN this full destructuring does not work in react-scripts for no clear reason
-const { REACT_APP_SPOTIFY_API_TOKEN } = process.env
+const { REACT_APP_SPOTIFY_API_TOKEN, CLIENT_ID, CLIENT_SECRET } = process.env
 
 spotifyApi.token = REACT_APP_SPOTIFY_API_TOKEN
+spotifyApi.CLIENT_ID = CLIENT_ID
+spotifyApi.CLIENT_SECRET = CLIENT_SECRET
 
 Object.defineProperties(logic, {
     __userId__: {

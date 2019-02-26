@@ -8,6 +8,10 @@
 const spotifyApi = {
     token: 'NO-TOKEN',
     url: 'https://api.spotify.com/v1',
+    url_token: "https://accounts.spotify.com/api/token",
+
+    CLIENT_ID: 'NO-CLIENT',
+    CLIENT_SECRET: 'NO-SECRET',
 
     /**
      * Searches artists.
@@ -30,13 +34,28 @@ const spotifyApi = {
         })
             .then(response => response.json())
             .then(response => {
-                if (response.error) throw Error(response.error.message)
+                if (response.error) {
+                  if (
+                    response.error.status === 401 &&
+                    response.error.message === "The access token expired"
+                  ) {
+                    return this.refreshToken(this.searchArtists(query));
+                  } else {
+                    throw Error(response.error.message);
+                  }
+                }       
+                const {
+                  artists: { items }
+                } = response;
+        
+                return items;
+              });
+          },
 
-                const { artists: { items } } = response
 
-                return items
-            })
-    },
+
+
+            
 
     /**
      * Retrieves an artist.
@@ -58,6 +77,21 @@ const spotifyApi = {
             }
         })
             .then(response => response.json())
+            .then(response => {
+                if (response.error) {
+                  if (
+                    response.error.status === 401 &&
+                    response.error.message === "The access token expired"
+                  ) {
+                    return this.refreshToken(this.retrieveArtist(artistId));
+                  } else {
+                    throw Error(response.error.message);
+                  }
+                }
+        
+                return response;
+              });
+          
     },
 
     /**
@@ -80,7 +114,21 @@ const spotifyApi = {
             }
         })
             .then(response => response.json())
-            .then(({ items }) => items)
+            .then(response => {
+                if (response.error) {
+                  if (
+                    response.error.status === 401 &&
+                    response.error.message === "The access token expired"
+                  ) {
+                    return this.refreshToken(this.retrieveArtist(artistId));
+                  } else {
+                    throw Error(response.error.message);
+                  }
+                }
+                return response;
+              })
+              .then(({ items }) => items);
+          
     },
 
     /**
@@ -103,7 +151,20 @@ const spotifyApi = {
             }
         })
             .then(response => response.json())
-    },
+            .then(response => {
+                if (response.error) {
+                  if (
+                    response.error.status === 401 &&
+                    response.error.message === "The access token expired"
+                  ) {
+                    return this.refreshToken(this.retrieveArtist(artistId));
+                  } else {
+                    throw Error(response.error.message);
+                  }
+                }
+                return response;
+              });
+          },
 
     /**
      * Retrieves tracks from album.
@@ -125,8 +186,21 @@ const spotifyApi = {
             }
         })
             .then(response => response.json())
-            .then(({ items }) => items)
-    },
+            .then(response => {
+                if (response.error) {
+                  if (
+                    response.error.status === 401 &&
+                    response.error.message === "The access token expired"
+                  ) {
+                    return this.refreshToken(this.retrieveArtist(artistId));
+                  } else {
+                    throw Error(response.error.message);
+                  }
+                }
+                return response;
+              })
+              .then(({ items }) => items);
+          },
 
     /**
      * Retrieves track.
@@ -147,8 +221,43 @@ const spotifyApi = {
                 authorization: `Bearer ${this.token}`
             }
         })
-            .then(response => response.json())
-    }
+            .then(response => response.json()).then(response => {
+                if (response.error) {
+                  if (
+                    response.error.status === 401 &&
+                    response.error.message === "The access token expired"
+                  ) {
+                    return this.refreshToken(this.retrieveArtist(artistId));
+                  } else {
+                    throw Error(response.error.message);
+                  }
+                }
+                return response;
+              });
+          },
+
+
+refreshToken(promise) {
+    const auth = this.CLIENT_ID + ":" + this.CLIENT_SECRET;
+
+    let buff = new Buffer(auth);
+    let base64auth = buff.toString("base64");
+    const basicAuth = `Basic ${base64auth}`;
+
+    return fetch(this.url_token, {
+      headers: {
+        Authorization: basicAuth,
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: "grant_type=client_credentials",
+      method: "POST"
+    })
+      .then(response => response.json())
+      .then(response => {
+        this.token = response.access_token;
+        return promise;
+      });
+  }
 }
 
 module.exports = spotifyApi
