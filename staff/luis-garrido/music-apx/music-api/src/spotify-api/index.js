@@ -192,9 +192,7 @@ const spotifyApi = {
                 }
                 return response;
               })
-              .then(({ items }) => {
-                  console.log(items)
-                  return items});
+              .then(({ items }) => items);
           },
 
     /**

@@ -1,10 +1,41 @@
-'use strict'
+"use strict";
 
-const spotifyApi = require('../spotify-api')
-const users = require('../data/users')
-const artistComments = require('../data/artist-comments')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const spotifyApi = require("../spotify-api");
+const users = require("../data/users");
+const artistComments = require("../data/artist-comments");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
+const mongoose = require("mongoose");
+
+const {
+    SchemaTypes: { ObjectId },
+    Schema
+} = mongoose;
+
+const User = new Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    surname: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
+});
+
+const models = {
+    User: mongoose.model("User", User)
+};
 
 /**
  * Abstraction of business logic.
@@ -13,280 +44,324 @@ const logic = {
     jwtSecret: null,
 
     /**
-    * Registers a user.
-    * 
-    * @param {string} name 
-    * @param {string} surname 
-    * @param {string} email 
-    * @param {string} password 
-    * @param {string} passwordConfirmation 
-    */
+     * Registers a user.
+     *
+     * @param {string} name
+     * @param {string} surname
+     * @param {string} email
+     * @param {string} password
+     * @param {string} passwordConfirmation
+     */
     registerUser(name, surname, email, password, passwordConfirmation) {
-        if (typeof name !== 'string') throw TypeError(name + ' is not a string')
+        if (typeof name !== "string")
+            throw TypeError(name + " is not a string");
 
-        if (!name.trim().length) throw Error('name cannot be empty')
+        if (!name.trim().length) throw Error("name cannot be empty");
 
-        if (typeof surname !== 'string') throw TypeError(surname + ' is not a string')
+        if (typeof surname !== "string")
+            throw TypeError(surname + " is not a string");
 
-        if (!surname.trim().length) throw Error('surname cannot be empty')
+        if (!surname.trim().length) throw Error("surname cannot be empty");
 
-        if (typeof email !== 'string') throw TypeError(email + ' is not a string')
+        if (typeof email !== "string")
+            throw TypeError(email + " is not a string");
 
-        if (!email.trim().length) throw Error('email cannot be empty')
+        if (!email.trim().length) throw Error("email cannot be empty");
 
-        if (typeof password !== 'string') throw TypeError(password + ' is not a string')
+        if (typeof password !== "string")
+            throw TypeError(password + " is not a string");
 
-        if (!password.trim().length) throw Error('password cannot be empty')
+        if (!password.trim().length) throw Error("password cannot be empty");
 
-        if (typeof passwordConfirmation !== 'string') throw TypeError(passwordConfirmation + ' is not a string')
+        if (typeof passwordConfirmation !== "string")
+            throw TypeError(passwordConfirmation + " is not a string");
 
-        if (!passwordConfirmation.trim().length) throw Error('password confirmation cannot be empty')
+        if (!passwordConfirmation.trim().length)
+            throw Error("password confirmation cannot be empty");
 
-        if (password !== passwordConfirmation) throw Error('passwords do not match')
+        if (password !== passwordConfirmation)
+            throw Error("passwords do not match");
 
-        return users.findByEmail(email)
+        // const symba = new Cat({ name: "Symba", age: 33 });
+
+        // symba.save().then(() => console.log("saved", symba.id));
+
+        // Cat.create({ name: "Symba", age: 33 });
+
+        // Cat.findOne({ name: 'Symba'})
+
+        const { User } = models;
+
+        return User.findOne({ email: email })
             .then(user => {
-                if (user) throw Error(`user with email ${email} already exists`)
+                if (user)
+                    throw Error(`user with email ${email} already exists`);
 
-                return bcrypt.hash(password, 10)
+                return bcrypt.hash(password, 10);
             })
-            .then(hash => users.add({ name, surname, email, password: hash }))
+            .then(hash =>
+                User.create({ name, surname, email, password: hash })
+            );
     },
 
     /**
      * Authenticates user by its credentials.
-     * 
-     * @param {string} email 
-     * @param {string} password 
+     *
+     * @param {string} email
+     * @param {string} password
      */
     authenticateUser(email, password) {
-        if (typeof email !== 'string') throw TypeError(email + ' is not a string')
+        if (typeof email !== "string")
+            throw TypeError(email + " is not a string");
 
-        if (!email.trim().length) throw Error('email cannot be empty')
+        if (!email.trim().length) throw Error("email cannot be empty");
 
-        if (typeof password !== 'string') throw TypeError(password + ' is not a string')
+        if (typeof password !== "string")
+            throw TypeError(password + " is not a string");
 
-        if (!password.trim().length) throw Error('password cannot be empty')
+        if (!password.trim().length) throw Error("password cannot be empty");
 
-        return users.findByEmail(email)
-            .then(user => {
-                if (!user) throw Error(`user with email ${email} not found`)
+        const { User } = models;
 
-                return bcrypt.compare(password, user.password)
-                    .then(match => {
-                        if (!match) throw Error('wrong credentials')
+        return User.findOne({ email: email }).then(user => {
+            if (!user) throw Error(`user with email ${email} not found`);
 
-                        const { id } = user
+            return bcrypt.compare(password, user.password).then(match => {
+                if (!match) throw Error("wrong credentials");
 
-                        const token = jwt.sign({ sub: id }, this.jwtSecret, { expiresIn: '4h' })
+                const { id } = user;
 
-                        return { id, token }
-                    })
-            })
+                const token = jwt.sign({ sub: id }, this.jwtSecret, {
+                    expiresIn: "4h"
+                });
+
+                return { id, token };
+            });
+        });
     },
 
     __verifyUserToken__(userId, token) {
-        const { sub } = jwt.verify(token, this.jwtSecret)
+        const { sub } = jwt.verify(token, this.jwtSecret);
 
-        if (sub !== userId) throw Error(`user id ${userId} does not match token user id ${sub}`)
+        if (sub !== userId)
+            throw Error(
+                `user id ${userId} does not match token user id ${sub}`
+            );
     },
 
     retrieveUser(userId, token) {
         // TODO validate userId and token type and content
 
-        this.__verifyUserToken__(userId, token)
+        this.__verifyUserToken__(userId, token);
 
-        return users.findById(userId)
-            .then(user => {
-                if (!user) throw Error(`user with id ${id} not found`)
+        const { User } = models;
 
-                delete user.password
+        return User.findOne({ _id: userId }).then(user => {
+            if (!user) throw Error(`user with id ${id} not found`);
 
-                return user
-            })
+            delete user.password;
+
+            return user;
+        });
     },
 
     // TODO updateUser and removeUser
 
     /**
      * Search artists.
-     * 
-     * @param {string} query 
+     *
+     * @param {string} query
      * @returns {Promise}
      */
     searchArtists(query) {
-        if (typeof query !== 'string') throw TypeError(`${query} is not a string`)
+        if (typeof query !== "string")
+            throw TypeError(`${query} is not a string`);
 
-        if (!query.trim().length) throw Error('query is empty')
+        if (!query.trim().length) throw Error("query is empty");
 
-        return spotifyApi.searchArtists(query)
+        return spotifyApi.searchArtists(query);
     },
 
     /**
      * Retrieves an artist.
-     * 
-     * @param {string} artistId 
+     *
+     * @param {string} artistId
      */
     retrieveArtist(artistId) {
-        if (typeof artistId !== 'string') throw TypeError(`${artistId} is not a string`)
+        if (typeof artistId !== "string")
+            throw TypeError(`${artistId} is not a string`);
 
-        if (!artistId.trim().length) throw Error('artistId is empty')
+        if (!artistId.trim().length) throw Error("artistId is empty");
 
-        return spotifyApi.retrieveArtist(artistId)
+        return spotifyApi.retrieveArtist(artistId);
     },
 
     /**
      * Toggles a artist from non-favorite to favorite, and viceversa.
-     * 
+     *
      * @param {string} artistId - The id of the artist to toggle in favorites.
      */
     toggleFavoriteArtist(userId, token, artistId) {
         // TODO validate arguments
 
-        this.__verifyUserToken__(userId, token)
+        this.__verifyUserToken__(userId, token);
 
-        return users.findById(userId)
-            .then(user => {
-                const { favoriteArtists = [] } = user
+        const { User } = models;
 
-                const index = favoriteArtists.findIndex(_artistId => _artistId === artistId)
+        return User.findOne({ _id: userId }).then(user => {
+            const { favoriteArtists = [] } = user;
 
-                if (index < 0) favoriteArtists.push(artistId)
-                else favoriteArtists.splice(index, 1)
+            const index = favoriteArtists.findIndex(
+                _artistId => _artistId === artistId
+            );
 
-                user.favoriteArtists = favoriteArtists
+            if (index < 0) favoriteArtists.push(artistId);
+            else favoriteArtists.splice(index, 1);
 
-                return users.update(user)
-            })
+            user.favoriteArtists = favoriteArtists;
+
+            return users.update(user);
+        });
     },
 
     addCommentToArtist(userId, token, artistId, text) {
         // TODO validate userId, token, artistId and text
 
-        this.__verifyUserToken__(userId, token)
+        this.__verifyUserToken__(userId, token);
 
         const comment = {
             userId,
             artistId,
             text,
-            date: new Date
-        }
+            date: new Date()
+        };
 
-        return spotifyApi.retrieveArtist(artistId)
+        return spotifyApi
+            .retrieveArtist(artistId)
             .then(({ error }) => {
-                if (error) throw Error(error.message)
+                if (error) throw Error(error.message);
             })
             .then(() => artistComments.add(comment))
-            .then(() => comment.id)
+            .then(() => comment.id);
     },
 
     listCommentsFromArtist(artistId) {
         // TODO validate artistId
 
-        return artistComments.find({ artistId })
+        return artistComments.find({ artistId });
     },
 
     /**
      * Retrieves albums from artist.
-     * 
-     * @param {string} artistId 
+     *
+     * @param {string} artistId
      */
     retrieveAlbums(artistId) {
-        if (typeof artistId !== 'string') throw TypeError(`${artistId} is not a string`)
+        if (typeof artistId !== "string")
+            throw TypeError(`${artistId} is not a string`);
 
-        if (!artistId.trim().length) throw Error('artistId is empty')
+        if (!artistId.trim().length) throw Error("artistId is empty");
 
-        return spotifyApi.retrieveAlbums(artistId)
+        return spotifyApi.retrieveAlbums(artistId);
     },
 
     /**
      * Retrieves an album.
-     * 
-     * @param {string} albumId 
+     *
+     * @param {string} albumId
      */
     retrieveAlbum(albumId) {
-        if (typeof albumId !== 'string') throw TypeError(`${albumId} is not a string`)
+        if (typeof albumId !== "string")
+            throw TypeError(`${albumId} is not a string`);
 
-        if (!albumId.trim().length) throw Error('albumId is empty')
+        if (!albumId.trim().length) throw Error("albumId is empty");
 
-        return spotifyApi.retrieveAlbum(albumId)
+        return spotifyApi.retrieveAlbum(albumId);
     },
 
     /**
      * Toggles a album from non-favorite to favorite, and viceversa.
-     * 
+     *
      * @param {string} albumId - The id of the album to toggle in favorites.
      */
     toggleFavoriteAlbum(userId, token, albumId) {
         // TODO validate arguments
 
-        this.__verifyUserToken__(userId, token)
+        this.__verifyUserToken__(userId, token);
 
-        return users.findById(userId)
-            .then(user => {
-                const { favoriteAlbums = [] } = user
+        const { User } = models;
 
-                const index = favoriteAlbums.findIndex(_albumId => _albumId === albumId)
+        return User.findOne({ _id: userId }).then(user => {
+            const { favoriteAlbums = [] } = user;
 
-                if (index < 0) favoriteAlbums.push(albumId)
-                else favoriteAlbums.splice(index, 1)
+            const index = favoriteAlbums.findIndex(
+                _albumId => _albumId === albumId
+            );
 
-                user.favoriteAlbums = favoriteAlbums
+            if (index < 0) favoriteAlbums.push(albumId);
+            else favoriteAlbums.splice(index, 1);
 
-                return users.update(user)
-            })
+            user.favoriteAlbums = favoriteAlbums;
+
+            return users.update(user);
+        });
     },
 
     /**
      * Retrieves tracks from album.
-     * 
-     * @param {string} albumId 
+     *
+     * @param {string} albumId
      */
     retrieveTracks(albumId) {
-        if (typeof albumId !== 'string') throw TypeError(`${albumId} is not a string`)
+        if (typeof albumId !== "string")
+            throw TypeError(`${albumId} is not a string`);
 
-        if (!albumId.trim().length) throw Error('albumId is empty')
+        if (!albumId.trim().length) throw Error("albumId is empty");
 
-        return spotifyApi.retrieveTracks(albumId)
+        return spotifyApi.retrieveTracks(albumId);
     },
 
     /**
      * Retrieves track.
-     * 
-     * @param {string} trackId 
+     *
+     * @param {string} trackId
      */
     retrieveTrack(trackId) {
-        if (typeof trackId !== 'string') throw TypeError(`${trackId} is not a string`)
+        if (typeof trackId !== "string")
+            throw TypeError(`${trackId} is not a string`);
 
-        if (!trackId.trim().length) throw Error('trackId is empty')
+        if (!trackId.trim().length) throw Error("trackId is empty");
 
-        return spotifyApi.retrieveTrack(trackId)
+        return spotifyApi.retrieveTrack(trackId);
     },
 
     /**
      * Toggles a track from non-favorite to favorite, and viceversa.
-     * 
+     *
      * @param {string} trackId - The id of the track to toggle in favorites.
      */
     toggleFavoriteTrack(userId, token, trackId) {
         // TODO validate arguments
 
-        this.__verifyUserToken__(userId, token)
+        this.__verifyUserToken__(userId, token);
 
-        return users.findById(userId)
-            .then(user => {
-                const { favoriteTracks = [] } = user
+        const { User } = models;
 
-                const index = favoriteTracks.findIndex(_trackId => _trackId === trackId)
+        return User.findOne({ _id: userId }).then(user => {
+            const { favoriteTracks = [] } = user;
 
-                if (index < 0) favoriteTracks.push(trackId)
-                else favoriteTracks.splice(index, 1)
+            const index = favoriteTracks.findIndex(
+                _trackId => _trackId === trackId
+            );
 
-                user.favoriteTracks = favoriteTracks
+            if (index < 0) favoriteTracks.push(trackId);
+            else favoriteTracks.splice(index, 1);
 
-                return users.update(user)
-            })
+            user.favoriteTracks = favoriteTracks;
+
+            return users.update(user);
+        });
     }
-}
+};
 
-module.exports = logic
+module.exports = logic;

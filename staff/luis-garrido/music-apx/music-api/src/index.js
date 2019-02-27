@@ -2,12 +2,13 @@ require("dotenv").config();
 
 require("isomorphic-fetch");
 
-const { MongoClient } = require("mongodb");
+// const { MongoClient } = require("mongodb"); // When we used Mongo Client
 const express = require("express");
 const bodyParser = require("body-parser");
 const spotifyApi = require("./spotify-api");
-const users = require("./data/users");
+// const users = require("./data/users"); // When we used Mongo Client
 const logic = require("./logic");
+const mongoose = require("mongoose");
 
 const {
     registerUser,
@@ -36,10 +37,12 @@ const {
     argv: [, , port = PORT || 8080]
 } = process;
 
-MongoClient.connect(DB_URL, { useNewUrlParser: true })
+// MongoClient.connect(DB_URL, { useNewUrlParser: true }) // When we used Mongo Client
+mongoose
+    .connect(DB_URL, { useNewUrlParser: true })
     .then(client => {
-        const db = client.db();
-        users.collection = db.collection("users");
+        // const db = client.db();
+        // users.collection = db.collection("users"); // When we used Mongo Client
 
         spotifyApi.token = SPOTIFY_API_TOKEN;
         spotifyApi.CLIENT_ID = CLIENT_ID;
@@ -93,9 +96,9 @@ MongoClient.connect(DB_URL, { useNewUrlParser: true })
 
         router.get("/albums/:albumId", retrieveAlbum);
 
-        router.get('/albums/:albumId/tracks', retrieveTracks)
-        
-        router.get('/tracks/:trackId', retrieveTrack)
+        router.get("/albums/:albumId/tracks", retrieveTracks);
+
+        router.get("/tracks/:trackId", retrieveTrack);
 
         // app.get('*', notFound)
 

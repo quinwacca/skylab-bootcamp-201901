@@ -13,34 +13,34 @@ const user = {
         return user
     },
 
-    add(user) {
-        // TODO validate user and its fields (type and content)
+    // add(user) {
+    //     // TODO validate user and its fields (type and content)
 
-        return this.collection.insertOne(user)
-            .then(res => res.insertedId.toString())
-    },
+    //     return this.collection.insertOne(user)
+    //         .then(res => res.insertedId.toString())
+    // },
 
-    findByEmail(email) {
-        // TODO validate email
+    // findByEmail(email) {
+    //     // TODO validate email
 
-        return this.collection.findOne({ email })
-            .then(user => {
-                if (!user) return null
+    //     return this.collection.findOne({ email })
+    //         .then(user => {
+    //             if (!user) return null
 
-                return this.__normalize__(user)
-            })
-    },
+    //             return this.__normalize__(user)
+    //         })
+    // },
 
-    findById(id) {
-        // TODO validate email
+    // findById(id) {
+    //     // TODO validate email
 
-        return this.collection.findOne({ _id: ObjectId(id) })
-            .then(user => {
-                if (!user) return null
+    //     return this.collection.findOne({ _id: ObjectId(id) })
+    //         .then(user => {
+    //             if (!user) return null
 
-                return this.__normalize__(user)
-            })
-    },
+    //             return this.__normalize__(user)
+    //         })
+    // },
 
     update(user) {
         // TODO validate user is an object with at least an id field
