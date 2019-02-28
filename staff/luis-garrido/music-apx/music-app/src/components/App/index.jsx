@@ -10,7 +10,8 @@ import i18n from '../../i18n'
 import logic from '../../logic'
 import './index.sass'
 
-function App(props) {
+const App = ({ history }) => {
+// function App({ history }) {
 // class App extends Component {
     // state = { selectedLanguage: 'en', loggedIn: logic.isUserLoggedIn, loginFeedback: null, registerFeedback: null }
     // const [ query, setQuery ] = useState('')
@@ -29,7 +30,7 @@ function App(props) {
     const handleRegister = (name, surname, email, password, passwordConfirmation) => {
         try {
             logic.registerUser(name, surname, email, password, passwordConfirmation)
-                .then(() => props.history.push('/login'))
+                .then(() => history.push('/login'))
                 .catch(({ message }) => setRegisterFeedback(message))
         } catch ({ message }) {
             setRegisterFeedback(message)
@@ -49,7 +50,7 @@ function App(props) {
     const handleLogin = (email, password) => {
         try {
             logic.logInUser(email, password)
-                .then(() => props.history.push('/'))
+                .then(() => history.push('/'))
                 .catch(({ message }) => setLoginFeedback(message))
         } catch ({ message }) {
             setLoginFeedback(message)
@@ -67,7 +68,7 @@ function App(props) {
     // }
 
     const title = <h1>{i18n[selectedLanguage].title}</h1>
-
+    
     return (
         <main className="app">
             <LanguageSelector selectedLanguage={selectedLanguage} languages={['en', 'es', 'ca', 'ga', 'fr']} onLanguageSelected={handleLanguageSelected} />
