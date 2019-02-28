@@ -1,33 +1,39 @@
 'use strict'
 
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import './index.sass'
 
-class Search extends Component {
-    state = { query: '' }
+function Search({ onSearch, title }) {
+// class Search extends Component {
+    
+    const [ query, setQuery ] = useState('')
+    // state = { query: '' }
 
-    handleQueryInput = ({ target: { value: query } }) => this.setState({ query })
+    const handleQueryInput = event => setQuery(event.target.value)
+    // const handleQueryInput = ({ target: { value: query } }) => this.setState({ query })
 
-    handleSearchSubmit = event => {
+    const handleSearchSubmit = event => {
         event.preventDefault()
-
-        const { state: { query }, props: { onSearch } } = this
-
+        console.log(query)
         onSearch(query)
     }
 
-    render() {
-        const { handleQueryInput, handleSearchSubmit, props: { title } } = this
+    // handleSearchSubmit = event => {
+    //     event.preventDefault()
 
-        return <section className="search">
-            <h2>{title}</h2>
+    //     onSearch(query)
+    // }
 
-            <form onSubmit={handleSearchSubmit}>
-                <input type="text" placeholder="Search an artist..." onChange={handleQueryInput} />
-                <button type="submit">Search</button>
-            </form>
-        </section>
-    }
+    return (
+    <section className="search">
+        <h2>{title}</h2>
+
+        <form onSubmit={handleSearchSubmit}>
+            <input type="text" placeholder="Search an artist..." onChange={handleQueryInput} />
+            <button type="submit">Search</button>
+        </form>
+    </section>
+    )
 }
 
 export default Search

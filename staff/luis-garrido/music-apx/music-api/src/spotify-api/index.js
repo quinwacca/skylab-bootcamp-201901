@@ -247,9 +247,11 @@ const spotifyApi = {
         })
             .then(response => response.json())
             .then(response => {
+                console.log(`antiguo: ${this.token} \n nuevo: ${response.access_token}`)
                 this.token = response.access_token;
-                return promise;
-            });
+                // return promise;
+            })
+            .then(() => promise);
     }
 }
 
