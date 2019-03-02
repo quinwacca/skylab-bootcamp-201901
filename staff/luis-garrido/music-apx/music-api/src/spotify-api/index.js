@@ -233,7 +233,7 @@ const spotifyApi = {
     refreshToken(promise) {
         const auth = this.CLIENT_ID + ":" + this.CLIENT_SECRET;
 
-        let buff = new Buffer(auth);
+        let buff = Buffer.from(auth);
         let base64auth = buff.toString("base64");
         const basicAuth = `Basic ${base64auth}`;
 
@@ -246,11 +246,7 @@ const spotifyApi = {
             method: "POST"
         })
             .then(response => response.json())
-            .then(response => {
-                console.log(`antiguo: ${this.token} \n nuevo: ${response.access_token}`)
-                this.token = response.access_token;
-                // return promise;
-            })
+            .then(response => this.token = response.access_token)
             .then(() => promise);
     }
 }
